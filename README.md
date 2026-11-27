@@ -8,7 +8,7 @@
 
 The goal is not "learn Python". It is narrower and more useful: **read AI code, write LLM applications, test them.** Every concept is mapped to its Java counterpart, every snippet was executed and its real output is printed in the text, and the whole day builds one running case: a FastAPI service that retrieves knowledge and answers with an LLM.
 
-📖 **[Full course (中文)](course.zh.md)** · [HTML reading version](docs/index.html) · [Companion code](code/)
+📖 **[Full course (中文)](course.zh.md)** · [HTML reading version](https://char518.github.io/python-1day-for-java-devs/) · [Companion code](code/)
 
 ## Who this is for
 
@@ -66,7 +66,7 @@ uv run uvicorn app:app             # /health now reports OpenAILLM
 
 ```
 course.zh.md        Full 8-hour course (Chinese, the main deliverable)
-docs/index.html     Styled HTML reading version (GitHub Pages ready)
+docs/index.html     Styled HTML reading version (live via GitHub Pages)
 code/               Verified companion code
   rag.py            Embedding + cosine retrieval + minimal RAG (mock & real)
   chat_app.py       P7: minimal FastAPI /chat endpoint

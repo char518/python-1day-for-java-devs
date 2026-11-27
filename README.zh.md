@@ -8,7 +8,7 @@
 
 目标不是"学会 Python"，而是更窄也更实用的三件事：**能读懂 AI 代码、能写 LLM 应用、能测试**。每个知识点都映射到 Java 对应物，每段代码都实际运行过并贴出真实输出，全天贯穿同一个案例。
 
-📖 **[完整课程（中文）](course.zh.md)** · [HTML 阅读版](docs/index.html) · [配套代码](code/) · [English](README.md)
+📖 **[完整课程（中文）](course.zh.md)** · [HTML 阅读版](https://char518.github.io/python-1day-for-java-devs/) · [配套代码](code/) · [English](README.md)
 
 ## 适合谁
 
@@ -66,7 +66,7 @@ uv run uvicorn app:app             # /health 显示 OpenAILLM
 
 ```
 course.zh.md        完整 8 小时课程（中文，主交付物）
-docs/index.html     带样式 HTML 阅读版（可挂 GitHub Pages）
+docs/index.html     带样式 HTML 阅读版（GitHub Pages 在线版）
 code/               已验证配套代码
   rag.py            embedding + 余弦检索 + 最小 RAG（mock/真实双实现）
   chat_app.py       P7：最小 FastAPI /chat 接口
