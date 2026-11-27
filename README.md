@@ -82,10 +82,6 @@ code/               Verified companion code
 - 🔑 snippets (real LLM / embedding network calls): client construction and wiring verified; no paid API call was made. Set `LLM_API_KEY` to run them yourself.
 - Mock embedding is a character-hash vector — it rehearses the pipeline shape, **not** semantics. Real retrieval quality requires a real embedding model (the code shape does not change).
 
-## Relationship to the full course
-
-This is the 1-day on-ramp: the minimum Python needed to start building AI applications. It pairs with the author's longer Java-to-AI agent course (8 weeks, project-driven). <!-- TODO: add public course URL -->
-
 ## License
 
 [MIT](LICENSE)
