@@ -8,7 +8,7 @@
 >
 > 节奏：每小时约 50 分钟读 + 10 分钟动手。常见坑随阶段分散讲，第 8 阶段汇总。
 >
-> 配套可运行代码在仓库 `code/` 目录（rag.py / chat_app.py / app.py + 测试）：`cd code && uv sync && uv run pytest -q` 即可复现文中 ✅ 结果。P1–P5 动手练习的参考答案在 `code/exercises/`。
+> 配套可运行代码在仓库 `code/` 目录（rag.py / chat_app.py / app.py + 测试）：`cd code && uv sync && uv run pytest -q` 即可复现文中 ✅ 结果。P1–P5 动手练习的参考答案在 `code/exercises/`。交互验证版 `course.ipynb`（27 cell 已实测）：[Colab 一键运行](https://colab.research.google.com/github/char518/python-1day-for-java-devs/blob/main/course.ipynb)，或本地 `cd code && uv run --with jupyterlab jupyter lab ../course.ipynb`。
 
 **结论前置**：你只需要一张映射表 + 一天肌肉记忆纠正：
 

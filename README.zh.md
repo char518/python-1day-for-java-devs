@@ -6,6 +6,7 @@
 [![Python 3.12+](https://img.shields.io/badge/Python-3.12%2B-blue.svg)](https://www.python.org/)
 [![Code: verified](https://img.shields.io/badge/code-verified-brightgreen.svg)](#验证)
 [![CI](https://github.com/char518/python-1day-for-java-devs/actions/workflows/ci.yml/badge.svg)](https://github.com/char518/python-1day-for-java-devs/actions/workflows/ci.yml)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/char518/python-1day-for-java-devs/blob/main/course.ipynb)
 
 **面向 10 年 Java 经验、Python 零基础的工程师：8 小时，从语法差异一路搭到一个能跑的 FastAPI + LLM + RAG 问答服务。**
 
@@ -66,10 +67,17 @@ export LLM_MODEL=qwen-plus
 uv run uvicorn app:app             # /health 显示 OpenAILLM
 ```
 
+## 交互验证 notebook
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/char518/python-1day-for-java-devs/blob/main/course.ipynb) —— 浏览器里实时改参数运行全部示例，零配置。27 个 cell 全部实测并纳入 CI。
+
+本地：`cd code && uv run --with jupyterlab jupyter lab ../course.ipynb`
+
 ## 仓库结构
 
 ```
 course.zh.md        完整 8 小时课程（中文，主交付物）
+course.ipynb        交互孪生版：27 个已执行 cell，Colab 可直接运行
 docs/index.html     带样式 HTML 阅读版（GitHub Pages 在线版）
 code/               已验证配套代码
   exercises/        P1-P5 动手练习参考答案

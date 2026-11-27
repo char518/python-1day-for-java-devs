@@ -6,6 +6,7 @@
 [![Python 3.12+](https://img.shields.io/badge/Python-3.12%2B-blue.svg)](https://www.python.org/)
 [![Code: verified](https://img.shields.io/badge/code-verified-brightgreen.svg)](#verification)
 [![CI](https://github.com/char518/python-1day-for-java-devs/actions/workflows/ci.yml/badge.svg)](https://github.com/char518/python-1day-for-java-devs/actions/workflows/ci.yml)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/char518/python-1day-for-java-devs/blob/main/course.ipynb)
 
 **An 8-hour crash course that takes a seasoned Java backend engineer to a working LLM + RAG service in Python — in one day.**
 
@@ -66,10 +67,17 @@ export LLM_MODEL=qwen-plus
 uv run uvicorn app:app             # /health now reports OpenAILLM
 ```
 
+## Interactive notebook
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/char518/python-1day-for-java-devs/blob/main/course.ipynb) — run and modify every example in your browser, zero setup. All 27 cells are executed and verified in CI.
+
+Local: `cd code && uv run --with jupyterlab jupyter lab ../course.ipynb`
+
 ## Repository layout
 
 ```
 course.zh.md        Full 8-hour course (Chinese, the main deliverable)
+course.ipynb        Interactive twin: 27 executed cells, Colab-ready
 docs/index.html     Styled HTML reading version (live via GitHub Pages)
 code/               Verified companion code
   exercises/        Reference solutions for P1-P5 hands-on tasks

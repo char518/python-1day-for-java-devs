@@ -18,3 +18,4 @@ jobs:
           enable-cache: true
       - run: uv sync --locked
       - run: uv run pytest -q
+      - run: uv run --with nbconvert --with ipykernel --with pandas jupyter nbconvert --to notebook --execute ../course.ipynb
