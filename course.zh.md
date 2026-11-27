@@ -8,7 +8,7 @@
 >
 > 节奏：每小时约 50 分钟读 + 10 分钟动手。常见坑随阶段分散讲，第 8 阶段汇总。
 >
-> 配套可运行代码在仓库 `code/` 目录（rag.py / chat_app.py / app.py + 测试）：`cd code && uv sync && uv run pytest -q` 即可复现文中 ✅ 结果。
+> 配套可运行代码在仓库 `code/` 目录（rag.py / chat_app.py / app.py + 测试）：`cd code && uv sync && uv run pytest -q` 即可复现文中 ✅ 结果。P1–P5 动手练习的参考答案在 `code/exercises/`。
 
 **结论前置**：你只需要一张映射表 + 一天肌肉记忆纠正：
 
@@ -61,6 +61,7 @@ P6 需要一个 OpenAI 兼容 API Key（通义 / DeepSeek / OpenAI 任一）。*
 
 ```bash
 brew install uv                       # 已装可跳过；无 brew 用: curl -LsSf https://astral.sh/uv/install.sh | sh
+# Windows: powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
 uv init --python 3.12 ai-quickstart   # macOS 系统 Python 常是 3.9，必须显式指定 3.12，uv 会自动下载
 cd ai-quickstart
 uv add httpx openai fastapi "uvicorn[standard]" numpy pandas pytest
@@ -161,7 +162,7 @@ True False
 
 ### 动手任务 + 自测（10 分钟）
 
-任务：
+任务（参考答案 [main.py](code/exercises/main.py)）：
 
 1. 跑上面 4 条命令建项目，把示例存进 `main.py` 跑通。
 2. 把 `a == b` 改成 `a is b`，先预测输出再验证。
@@ -330,7 +331,7 @@ flatMap 式嵌套【必学，RAG 切块会用】：`[chunk for doc in docs for c
 2. `token_stats(messages) -> tuple[int, float]`：总 token 与平均 token（用上面的粗估法）
 3. `top_k(scored: list[dict], k: int) -> list[dict]`：按 score 取前 k
 
-对答案：用文中 messages，`token_stats` 应输出 `(15, 3.75)`。
+对答案：用文中 messages，`token_stats` 应输出 `(15, 3.75)`。参考答案 [chat_stats.py](code/exercises/chat_stats.py)。
 
 自测：
 
@@ -521,7 +522,7 @@ class Session:
 
 ### 动手任务 + 自测（10 分钟）
 
-任务：新建 `models.py` + `decorators.py`——
+任务：新建 `models.py` + `decorators.py`（参考答案 [models.py](code/exercises/models.py) / [decorators.py](code/exercises/decorators.py)）——
 
 1. `models.py`：`ChatMessage`、`Chunk(id, text, score=0.0)` 两个 dataclass；`ChatSession` 类带 `add()` 和 `payload()`（返回可直接发给 LLM 的 dict）。
 2. `decorators.py`：默写 `@retry`（不看上文），用"前两次抛异常、第三次成功"的假函数验证。
@@ -674,7 +675,7 @@ async with httpx.AsyncClient(timeout=30) as client:
 
 ### 动手任务 + 自测（10 分钟）
 
-任务：
+任务（参考答案 [history.py](code/exercises/history.py) / [weather.py](code/exercises/weather.py)）：
 
 1. `history.py`：用 pathlib + json 把 P3 的 `ChatMessage` 列表落盘再读回，断言往返相等。
 2. `weather.py`：httpx 取 `https://wttr.in/Beijing?format=j1`，提取 `current_condition[0]["temp_C"]` 打印——这是 P6"工具结果喂给 LLM"的原型。
@@ -793,7 +794,7 @@ pd.read_csv("eval.csv")                      # 读 CSV 一行搞定
 
 ### 动手任务 + 自测（10 分钟）
 
-任务：
+任务（参考答案 [similarity.py](code/exercises/similarity.py)）：
 
 1. `similarity.py`：默写 `cosine` + 批量版，对文中 3 个 chunk 算 top-2，答案应为 `[0 2]`。
 2. 用 `np.random.default_rng(42).random(384)` 造一个"假 embedding"，验证自相似 ≈ 1，并解释为什么不精确等于 1。
@@ -917,7 +918,7 @@ RAG = Retrieval-Augmented Generation。生活类比：**开卷考试**——LLM 
 
 管道五步：切块 → embedding → 存索引（numpy 矩阵）→ 检索 top-k → 塞进 prompt。
 
-`rag.py` 核心代码 ✅（实测，mock 模式）。完整文件 = 文件头 `import os` + `import numpy as np` + 6.2 的双实现 + 6.3 的 `mock_embed` + 本节代码：
+`rag.py` 核心代码 ✅（实测，mock 模式；完整文件 [code/rag.py](code/rag.py)）。完整文件 = 文件头 `import os` + `import numpy as np` + 6.2 的双实现 + 6.3 的 `mock_embed` + 本节代码：
 
 ```python
 KB = [
@@ -1009,7 +1010,7 @@ overlap 防止句子被拦腰切断丢语义；真实项目按段落/标题切�
 
 **pydantic = DTO + Bean Validation + Jackson 三合一**：声明模型即完成序列化与校验，校验失败自动返回 422 ≈ `MethodArgumentNotValidException`。
 
-`chat_app.py` ✅：
+`chat_app.py` ✅（完整文件 [code/chat_app.py](code/chat_app.py)）：
 
 ```python
 from fastapi import FastAPI
@@ -1060,7 +1061,7 @@ curl -s http://127.0.0.1:8000/chat -H 'Content-Type: application/json' \
 | `Mockito.mock` | 鸭子类型 fake / `monkeypatch` |
 | `MockMvc` | `fastapi.testclient.TestClient` |
 
-`test_chat_app.py` ✅（实测 9 passed，含 P8 的 3 个）：
+`test_chat_app.py` ✅（实测 16 passed，含 P8 的 3 个与 test_rag.py 的 7 个）：
 
 ```python
 import numpy as np
@@ -1099,7 +1100,7 @@ def test_cosine_self():
 
 ```bash
 uv run pytest -q
-# 实测：9 passed in 0.69s
+# 实测：16 passed in 0.33s
 ```
 
 ### 7.3 本阶段常见坑
@@ -1131,7 +1132,7 @@ uv run pytest -q
 
 把全天积木拼起来：`POST /ask` → 检索 top-k → 组 prompt → LLM（真实/mock 自动切换）→ 返回 **answer + sources**（RAG 回答必须可溯源）。
 
-`app.py` ✅（实测：TestClient + 真实 uvicorn + curl 全通过）：
+`app.py` ✅（实测：TestClient + 真实 uvicorn + curl 全通过；完整文件 [code/app.py](code/app.py)）：
 
 ```python
 from fastapi import FastAPI
@@ -1175,7 +1176,7 @@ def health():
     return {"status": "ok", "llm": type(llm).__name__}
 ```
 
-`test_app.py` ✅：
+`test_app.py` ✅（完整文件 [code/test_app.py](code/test_app.py)）：
 
 ```python
 from fastapi.testclient import TestClient
@@ -1219,7 +1220,7 @@ curl 实测返回（mock 模式）：
 }
 ```
 
-`/health` → `{"status":"ok","llm":"FakeLLM"}`；`/docs` → 200；空 question → 422。`uv run pytest -q` → 9 passed。
+`/health` → `{"status":"ok","llm":"FakeLLM"}`；`/docs` → 200；空 question → 422。`uv run pytest -q` → 16 passed。
 
 切换真实 LLM 🔑：
 

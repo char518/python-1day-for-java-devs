@@ -146,7 +146,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <p>全天贯穿同一个案例：搭一个「对话 → 调 LLM → 检索知识 → 回答」的服务，每个模块的练习都往这个服务上添一块砖。</p>
 <p><strong>验证标注</strong>：✅ = 实测通过（验证环境见附录）；🔑 = 需要真实 API Key，代码接线已验证、网络调用未实测。</p>
 <p>节奏：每小时约 50 分钟读 + 10 分钟动手。常见坑随阶段分散讲，第 8 阶段汇总。</p>
-<p>配套可运行代码在仓库 <code>code/</code> 目录（rag.py / chat_app.py / app.py + 测试）：<code>cd code &amp;&amp; uv sync &amp;&amp; uv run pytest -q</code> 即可复现文中 ✅ 结果。</p>
+<p>配套可运行代码在仓库 <code>code/</code> 目录（rag.py / chat_app.py / app.py + 测试）：<code>cd code &amp;&amp; uv sync &amp;&amp; uv run pytest -q</code> 即可复现文中 ✅ 结果。P1–P5 动手练习的参考答案在 <code>code/exercises/</code>。</p>
 </blockquote>
 <p><strong>结论前置</strong>：你只需要一张映射表 + 一天肌肉记忆纠正：</p>
 <table>
@@ -319,6 +319,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </table>
 <p>命令（macOS，一次装好全天依赖）：</p>
 <div class="highlight"><pre><span></span><code>brew<span class="w"> </span>install<span class="w"> </span>uv<span class="w">                       </span><span class="c1"># 已装可跳过；无 brew 用: curl -LsSf https://astral.sh/uv/install.sh | sh</span>
+<span class="c1"># Windows: powershell -c "irm https://astral.sh/uv/install.ps1 | iex"</span>
 uv<span class="w"> </span>init<span class="w"> </span>--python<span class="w"> </span><span class="m">3</span>.12<span class="w"> </span>ai-quickstart<span class="w">   </span><span class="c1"># macOS 系统 Python 常是 3.9，必须显式指定 3.12，uv 会自动下载</span>
 <span class="nb">cd</span><span class="w"> </span>ai-quickstart
 uv<span class="w"> </span>add<span class="w"> </span>httpx<span class="w"> </span>openai<span class="w"> </span>fastapi<span class="w"> </span><span class="s2">"uvicorn[standard]"</span><span class="w"> </span>numpy<span class="w"> </span>pandas<span class="w"> </span>pytest
@@ -454,7 +455,7 @@ True False
 <li><strong>没有编译期报错</strong>：Java 里 IDE 红线救你的场景，Python 全拖到运行时 → P2 类型标注、P7 pytest 是必修课不是选修课。</li>
 </ol>
 <h3 id="动手任务-自测10-分钟">动手任务 + 自测（10 分钟）</h3>
-<p>任务：</p>
+<p>任务（参考答案 <a href="code/exercises/main.py">main.py</a>）：</p>
 <ol>
 <li>跑上面 4 条命令建项目，把示例存进 <code>main.py</code> 跑通。</li>
 <li>把 <code>a == b</code> 改成 <code>a is b</code>，先预测输出再验证。</li>
@@ -694,7 +695,7 @@ True False
 <li><code>token_stats(messages) -&gt; tuple[int, float]</code>：总 token 与平均 token（用上面的粗估法）</li>
 <li><code>top_k(scored: list[dict], k: int) -&gt; list[dict]</code>：按 score 取前 k</li>
 </ol>
-<p>对答案：用文中 messages，<code>token_stats</code> 应输出 <code>(15, 3.75)</code>。</p>
+<p>对答案：用文中 messages，<code>token_stats</code> 应输出 <code>(15, 3.75)</code>。参考答案 <a href="code/exercises/chat_stats.py">chat_stats.py</a>。</p>
 <p>自测：</p>
 <ul>
 <li>Python 标注和 Java 泛型的本质区别？各由谁检查？</li>
@@ -883,7 +884,7 @@ True False
 <li><strong>装饰器忘 <code>@wraps</code></strong>：函数名变成 <code>wrapper</code>，FastAPI 路由内省、pytest 报告全乱。包装函数固定加。</li>
 </ol>
 <h3 id="动手任务-自测10-分钟_2">动手任务 + 自测（10 分钟）</h3>
-<p>任务：新建 <code>models.py</code> + <code>decorators.py</code>——</p>
+<p>任务：新建 <code>models.py</code> + <code>decorators.py</code>（参考答案 <a href="code/exercises/models.py">models.py</a> / <a href="code/exercises/decorators.py">decorators.py</a>）——</p>
 <ol>
 <li><code>models.py</code>：<code>ChatMessage</code>、<code>Chunk(id, text, score=0.0)</code> 两个 dataclass；<code>ChatSession</code> 类带 <code>add()</code> 和 <code>payload()</code>（返回可直接发给 LLM 的 dict）。</li>
 <li><code>decorators.py</code>：默写 <code>@retry</code>（不看上文），用"前两次抛异常、第三次成功"的假函数验证。</li>
@@ -1054,7 +1055,7 @@ True False
 <li><strong>async def 里放同步阻塞</strong>（time.sleep / 同步 httpx / 大循环计算）：整个事件循环冻结，实测并发退化为串行。</li>
 </ol>
 <h3 id="动手任务-自测10-分钟_3">动手任务 + 自测（10 分钟）</h3>
-<p>任务：</p>
+<p>任务（参考答案 <a href="code/exercises/history.py">history.py</a> / <a href="code/exercises/weather.py">weather.py</a>）：</p>
 <ol>
 <li><code>history.py</code>：用 pathlib + json 把 P3 的 <code>ChatMessage</code> 列表落盘再读回，断言往返相等。</li>
 <li><code>weather.py</code>：httpx 取 <code>https://wttr.in/Beijing?format=j1</code>，提取 <code>current_condition[0]["temp_C"]</code> 打印——这是 P6"工具结果喂给 LLM"的原型。</li>
@@ -1149,7 +1150,7 @@ True False
 <li><strong>浮点精度</strong>：实测 <code>cosine(v,v)</code> float64 得 <code>0.9999999999999998</code>，float32 得 <code>1.0000001</code>。断言别写 <code>== 1.0</code>，用近似比较（P7 的 <code>pytest.approx</code>）。</li>
 </ol>
 <h3 id="动手任务-自测10-分钟_4">动手任务 + 自测（10 分钟）</h3>
-<p>任务：</p>
+<p>任务（参考答案 <a href="code/exercises/similarity.py">similarity.py</a>）：</p>
 <ol>
 <li><code>similarity.py</code>：默写 <code>cosine</code> + 批量版，对文中 3 个 chunk 算 top-2，答案应为 <code>[0 2]</code>。</li>
 <li>用 <code>np.random.default_rng(42).random(384)</code> 造一个"假 embedding"，验证自相似 ≈ 1，并解释为什么不精确等于 1。</li>
@@ -1271,7 +1272,7 @@ True False
 <h3 id="64-最小-rag必学约-20-分钟全天核心">6.4 最小 RAG【必学，约 20 分钟】——全天核心</h3>
 <p>RAG = Retrieval-Augmented Generation。生活类比：<strong>开卷考试</strong>——LLM 是考生，检索是翻教材找到相关段落，带着段落答题。为什么用它：缓解幻觉、注入私有知识、比微调便宜。<strong>边界</strong>：检索质量决定上限，查不到就答不对（garbage in, garbage out）。</p>
 <p>管道五步：切块 → embedding → 存索引（numpy 矩阵）→ 检索 top-k → 塞进 prompt。</p>
-<p><code>rag.py</code> 核心代码 ✅（实测，mock 模式）。完整文件 = 文件头 <code>import os</code> + <code>import numpy as np</code> + 6.2 的双实现 + 6.3 的 <code>mock_embed</code> + 本节代码：</p>
+<p><code>rag.py</code> 核心代码 ✅（实测，mock 模式；完整文件 <a href="code/rag.py">code/rag.py</a>）。完整文件 = 文件头 <code>import os</code> + <code>import numpy as np</code> + 6.2 的双实现 + 6.3 的 <code>mock_embed</code> + 本节代码：</p>
 <div class="highlight"><pre><span></span><code><span class="n">KB</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">"RAG（检索增强生成）先从知识库检索相关片段，再交给大模型生成回答，能缓解幻觉并注入私有知识。"</span><span class="p">,</span>
     <span class="s2">"embedding 把文本映射为定长浮点向量，语义相近的文本向量方向相近，常用余弦相似度衡量。"</span><span class="p">,</span>
@@ -1382,7 +1383,7 @@ Q: 怎么衡量语义相似度
 </tbody>
 </table>
 <p><strong>pydantic = DTO + Bean Validation + Jackson 三合一</strong>：声明模型即完成序列化与校验，校验失败自动返回 422 ≈ <code>MethodArgumentNotValidException</code>。</p>
-<p><code>chat_app.py</code> ✅：</p>
+<p><code>chat_app.py</code> ✅（完整文件 <a href="code/chat_app.py">code/chat_app.py</a>）：</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">FastAPI</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span>
 
@@ -1455,7 +1456,7 @@ curl<span class="w"> </span>-s<span class="w"> </span>http://127.0.0.1:8000/chat
 </tr>
 </tbody>
 </table>
-<p><code>test_chat_app.py</code> ✅（实测 9 passed，含 P8 的 3 个）：</p>
+<p><code>test_chat_app.py</code> ✅（实测 16 passed，含 P8 的 3 个与 test_rag.py 的 7 个）：</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">fastapi.testclient</span><span class="w"> </span><span class="kn">import</span> <span class="n">TestClient</span>
@@ -1490,7 +1491,7 @@ curl<span class="w"> </span>-s<span class="w"> </span>http://127.0.0.1:8000/chat
 
 <p>运行 ≈ <code>mvn test</code>：</p>
 <div class="highlight"><pre><span></span><code>uv<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>-q
-<span class="c1"># 实测：9 passed in 0.69s</span>
+<span class="c1"># 实测：16 passed in 0.33s</span>
 </code></pre></div>
 
 <h3 id="73-本阶段常见坑">7.3 本阶段常见坑</h3>
@@ -1517,7 +1518,7 @@ curl<span class="w"> </span>-s<span class="w"> </span>http://127.0.0.1:8000/chat
 <h2 id="第-8-阶段第-8-小时综合项目-坑汇总-自测清单">第 8 阶段（第 8 小时）：综合项目 + 坑汇总 + 自测清单</h2>
 <h3 id="81-综合项目fastapi-llm-rag-问答服务必学">8.1 综合项目：FastAPI + LLM + RAG 问答服务【必学】</h3>
 <p>把全天积木拼起来：<code>POST /ask</code> → 检索 top-k → 组 prompt → LLM（真实/mock 自动切换）→ 返回 <strong>answer + sources</strong>（RAG 回答必须可溯源）。</p>
-<p><code>app.py</code> ✅（实测：TestClient + 真实 uvicorn + curl 全通过）：</p>
+<p><code>app.py</code> ✅（实测：TestClient + 真实 uvicorn + curl 全通过；完整文件 <a href="code/app.py">code/app.py</a>）：</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">FastAPI</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span>
 
@@ -1559,7 +1560,7 @@ curl<span class="w"> </span>-s<span class="w"> </span>http://127.0.0.1:8000/chat
     <span class="k">return</span> <span class="p">{</span><span class="s2">"status"</span><span class="p">:</span> <span class="s2">"ok"</span><span class="p">,</span> <span class="s2">"llm"</span><span class="p">:</span> <span class="nb">type</span><span class="p">(</span><span class="n">llm</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">}</span>
 </code></pre></div>
 
-<p><code>test_app.py</code> ✅：</p>
+<p><code>test_app.py</code> ✅（完整文件 <a href="code/test_app.py">code/test_app.py</a>）：</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">fastapi.testclient</span><span class="w"> </span><span class="kn">import</span> <span class="n">TestClient</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">app</span><span class="w"> </span><span class="kn">import</span> <span class="n">app</span>
 
@@ -1597,7 +1598,7 @@ curl<span class="w"> </span>-s<span class="w"> </span>http://127.0.0.1:8000/ask<
 <span class="p">}</span>
 </code></pre></div>
 
-<p><code>/health</code> → <code>{"status":"ok","llm":"FakeLLM"}</code>；<code>/docs</code> → 200；空 question → 422。<code>uv run pytest -q</code> → 9 passed。</p>
+<p><code>/health</code> → <code>{"status":"ok","llm":"FakeLLM"}</code>；<code>/docs</code> → 200；空 question → 422。<code>uv run pytest -q</code> → 16 passed。</p>
 <p>切换真实 LLM 🔑：</p>
 <div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">LLM_API_KEY</span><span class="o">=</span>你的Key
 <span class="nb">export</span><span class="w"> </span><span class="nv">LLM_BASE_URL</span><span class="o">=</span>https://dashscope.aliyuncs.com/compatible-mode/v1<span class="w">   </span><span class="c1"># 或 DeepSeek/OpenAI</span>

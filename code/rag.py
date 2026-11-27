@@ -14,6 +14,10 @@ def mock_embed(text: str, dim: int = 64) -> np.ndarray:
     return v
 
 
+def split_text(text: str, size: int = 200, overlap: int = 50) -> list[str]:
+    return [text[i:i + size] for i in range(0, len(text), size - overlap)]
+
+
 class FakeLLM:
     def chat(self, messages: list[dict]) -> str:
         return f"[mock] 已收到 {len(messages)} 条消息，最后一条：{messages[-1]['content'][:40]}..."

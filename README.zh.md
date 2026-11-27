@@ -1,8 +1,11 @@
 # Java 后端 → AI 应用开发：Python 1 天 8 小时最小必要集
 
+![Python in 1 Day for Java Developers](docs/banner.png)
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.12+](https://img.shields.io/badge/Python-3.12%2B-blue.svg)](https://www.python.org/)
 [![Code: verified](https://img.shields.io/badge/code-verified-brightgreen.svg)](#验证)
+[![CI](https://github.com/char518/python-1day-for-java-devs/actions/workflows/ci.yml/badge.svg)](https://github.com/char518/python-1day-for-java-devs/actions/workflows/ci.yml)
 
 **面向 10 年 Java 经验、Python 零基础的工程师：8 小时，从语法差异一路搭到一个能跑的 FastAPI + LLM + RAG 问答服务。**
 
@@ -39,11 +42,12 @@
 ## 快速开始（配套代码）
 
 需要 [uv](https://docs.astral.sh/uv/)。无需 API Key，服务以 mock 模式启动。
+Windows：`powershell -c "irm https://astral.sh/uv/install.ps1 | iex"` 安装 uv。
 
 ```bash
 cd code
 uv sync                            # 锁定依赖；uv 自动准备 Python 3.12
-uv run pytest -q                   # 9 个测试
+uv run pytest -q                   # 16 个测试
 uv run uvicorn app:app --reload    # 打开 http://127.0.0.1:8000/docs
 ```
 
@@ -53,7 +57,7 @@ curl -s http://127.0.0.1:8000/ask -H 'Content-Type: application/json' \
 # -> {"answer": "...", "sources": [{"text": "...", "score": 0.408}, ...]}
 ```
 
-切换真实 LLM（任意 OpenAI 兼容厂商）：
+切换真实 LLM（任意 OpenAI 兼容厂商）——或把 `code/.env.example` 复制为 `code/.env`（`uv run` 自动加载）：
 
 ```bash
 export LLM_API_KEY=你的Key
@@ -68,6 +72,8 @@ uv run uvicorn app:app             # /health 显示 OpenAILLM
 course.zh.md        完整 8 小时课程（中文，主交付物）
 docs/index.html     带样式 HTML 阅读版（GitHub Pages 在线版）
 code/               已验证配套代码
+  exercises/        P1-P5 动手练习参考答案
+  .env.example      真实 LLM 模式环境变量模板
   rag.py            embedding + 余弦检索 + 最小 RAG（mock/真实双实现）
   chat_app.py       P7：最小 FastAPI /chat 接口
   app.py            P8 综合项目：/ask 返回 answer + sources

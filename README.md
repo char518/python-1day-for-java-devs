@@ -1,8 +1,11 @@
 # Python in 1 Day for Java Developers — AI Application Edition
 
+![Python in 1 Day for Java Developers](docs/banner.png)
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.12+](https://img.shields.io/badge/Python-3.12%2B-blue.svg)](https://www.python.org/)
 [![Code: verified](https://img.shields.io/badge/code-verified-brightgreen.svg)](#verification)
+[![CI](https://github.com/char518/python-1day-for-java-devs/actions/workflows/ci.yml/badge.svg)](https://github.com/char518/python-1day-for-java-devs/actions/workflows/ci.yml)
 
 **An 8-hour crash course that takes a seasoned Java backend engineer to a working LLM + RAG service in Python — in one day.**
 
@@ -39,11 +42,12 @@ The goal is not "learn Python". It is narrower and more useful: **read AI code, 
 ## Quickstart (companion code)
 
 Requires [uv](https://docs.astral.sh/uv/). No API key needed — the service starts in mock mode.
+Windows: install uv with `powershell -c "irm https://astral.sh/uv/install.ps1 | iex"`.
 
 ```bash
 cd code
 uv sync                            # locked deps; uv fetches Python 3.12 if needed
-uv run pytest -q                   # 9 tests
+uv run pytest -q                   # 16 tests
 uv run uvicorn app:app --reload    # open http://127.0.0.1:8000/docs
 ```
 
@@ -53,7 +57,7 @@ curl -s http://127.0.0.1:8000/ask -H 'Content-Type: application/json' \
 # -> {"answer": "...", "sources": [{"text": "...", "score": 0.408}, ...]}
 ```
 
-Switch to a real LLM (any OpenAI-compatible vendor):
+Switch to a real LLM (any OpenAI-compatible vendor) — or copy `code/.env.example` to `code/.env` (`uv run` loads it automatically):
 
 ```bash
 export LLM_API_KEY=your-key
@@ -68,6 +72,8 @@ uv run uvicorn app:app             # /health now reports OpenAILLM
 course.zh.md        Full 8-hour course (Chinese, the main deliverable)
 docs/index.html     Styled HTML reading version (live via GitHub Pages)
 code/               Verified companion code
+  exercises/        Reference solutions for P1-P5 hands-on tasks
+  .env.example      Environment template for real-LLM mode
   rag.py            Embedding + cosine retrieval + minimal RAG (mock & real)
   chat_app.py       P7: minimal FastAPI /chat endpoint
   app.py            P8 capstone: /ask with answer + sources
