@@ -1,0 +1,1933 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Python 1 天 8 小时最小必要集（Java 后端 → AI 应用开发）</title>
+<style>
+:root { --fg:#1f2328; --muted:#59636e; --border:#d1d9e0; --bg:#ffffff; --code-bg:#f6f8fa; --accent:#0969da; }
+* { box-sizing:border-box; }
+body { margin:0; color:var(--fg); background:var(--bg);
+  font:16px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif; }
+.container { max-width:920px; margin:0 auto; padding:48px 32px 96px; }
+h1 { font-size:1.9em; line-height:1.35; border-bottom:2px solid var(--border); padding-bottom:.4em; }
+h2 { font-size:1.45em; margin-top:2.4em; border-bottom:1px solid var(--border); padding-bottom:.3em; }
+h3 { font-size:1.15em; margin-top:1.7em; }
+a { color:var(--accent); text-decoration:none; }
+a:hover { text-decoration:underline; }
+code { font-family:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace; font-size:.875em;
+  background:var(--code-bg); padding:.2em .4em; border-radius:6px; }
+pre { background:var(--code-bg); border:1px solid var(--border); border-radius:8px;
+  padding:14px 16px; overflow-x:auto; line-height:1.55; }
+pre code { background:none; padding:0; font-size:.85em; }
+.highlight { margin:1em 0; }
+.highlight pre { margin:0; }
+table { border-collapse:collapse; width:100%; margin:1em 0; display:block; overflow-x:auto; }
+th, td { border:1px solid var(--border); padding:8px 12px; text-align:left; vertical-align:top; }
+th { background:var(--code-bg); white-space:nowrap; }
+tbody tr:nth-child(even) td { background:#fafbfc; }
+blockquote { margin:1em 0; padding:.6em 1.1em; border-left:4px solid var(--accent);
+  background:#f0f6ff; color:var(--muted); border-radius:0 8px 8px 0; }
+blockquote p { margin:.3em 0; }
+hr { border:none; border-top:2px solid var(--border); margin:2.8em 0; }
+li.task { list-style:none; margin-left:-1.4em; }
+li.task input { margin-right:.55em; transform:translateY(1px); }
+details.toc { background:var(--code-bg); border:1px solid var(--border); border-radius:8px;
+  padding:12px 20px; margin:1.5em 0; }
+details.toc summary { cursor:pointer; font-weight:600; color:var(--muted); }
+details.toc ul { margin:.6em 0 .2em; padding-left:1.4em; }
+details.toc li { margin:.25em 0; }
+@media (max-width:640px) { .container { padding:24px 16px 64px; } body { font-size:15px; } }
+@media print {
+  .container { max-width:none; padding:0; }
+  details.toc { display:none; }
+  pre { white-space:pre-wrap; word-break:break-all; }
+  h2 { page-break-after:avoid; }
+}
+
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #ffffcc }
+.highlight { background: #f8f8f8; }
+.highlight .c { color: #3D7B7B; font-style: italic } /* Comment */
+.highlight .err { border: 1px solid #F00 } /* Error */
+.highlight .k { color: #008000; font-weight: bold } /* Keyword */
+.highlight .o { color: #666 } /* Operator */
+.highlight .ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.highlight .cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #9C6500 } /* Comment.Preproc */
+.highlight .cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.highlight .c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.highlight .gd { color: #A00000 } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.highlight .gr { color: #E40000 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #008400 } /* Generic.Inserted */
+.highlight .go { color: #717171 } /* Generic.Output */
+.highlight .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #04D } /* Generic.Traceback */
+.highlight .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #008000 } /* Keyword.Pseudo */
+.highlight .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #B00040 } /* Keyword.Type */
+.highlight .m { color: #666 } /* Literal.Number */
+.highlight .s { color: #BA2121 } /* Literal.String */
+.highlight .na { color: #687822 } /* Name.Attribute */
+.highlight .nb { color: #008000 } /* Name.Builtin */
+.highlight .nc { color: #00F; font-weight: bold } /* Name.Class */
+.highlight .no { color: #800 } /* Name.Constant */
+.highlight .nd { color: #A2F } /* Name.Decorator */
+.highlight .ni { color: #717171; font-weight: bold } /* Name.Entity */
+.highlight .ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #00F } /* Name.Function */
+.highlight .nl { color: #767600 } /* Name.Label */
+.highlight .nn { color: #00F; font-weight: bold } /* Name.Namespace */
+.highlight .nt { color: #008000; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #19177C } /* Name.Variable */
+.highlight .ow { color: #A2F; font-weight: bold } /* Operator.Word */
+.highlight .w { color: #BBB } /* Text.Whitespace */
+.highlight .mb { color: #666 } /* Literal.Number.Bin */
+.highlight .mf { color: #666 } /* Literal.Number.Float */
+.highlight .mh { color: #666 } /* Literal.Number.Hex */
+.highlight .mi { color: #666 } /* Literal.Number.Integer */
+.highlight .mo { color: #666 } /* Literal.Number.Oct */
+.highlight .sa { color: #BA2121 } /* Literal.String.Affix */
+.highlight .sb { color: #BA2121 } /* Literal.String.Backtick */
+.highlight .sc { color: #BA2121 } /* Literal.String.Char */
+.highlight .dl { color: #BA2121 } /* Literal.String.Delimiter */
+.highlight .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.highlight .s2 { color: #BA2121 } /* Literal.String.Double */
+.highlight .se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.highlight .sh { color: #BA2121 } /* Literal.String.Heredoc */
+.highlight .si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.highlight .sx { color: #008000 } /* Literal.String.Other */
+.highlight .sr { color: #A45A77 } /* Literal.String.Regex */
+.highlight .s1 { color: #BA2121 } /* Literal.String.Single */
+.highlight .ss { color: #19177C } /* Literal.String.Symbol */
+.highlight .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #00F } /* Name.Function.Magic */
+.highlight .vc { color: #19177C } /* Name.Variable.Class */
+.highlight .vg { color: #19177C } /* Name.Variable.Global */
+.highlight .vi { color: #19177C } /* Name.Variable.Instance */
+.highlight .vm { color: #19177C } /* Name.Variable.Magic */
+.highlight .il { color: #666 } /* Literal.Number.Integer.Long */</style>
+</head>
+<body>
+<div class="container">
+<h1 id="python-1-天-8-小时最小必要集java-后端-ai-应用开发">Python 1 天 8 小时最小必要集（Java 后端 → AI 应用开发）</h1><details class="toc"><summary>目录（点击展开）</summary><div class="toc">
+<ul>
+<li><a href="#python-1-天-8-小时最小必要集java-后端-ai-应用开发">Python 1 天 8 小时最小必要集（Java 后端 → AI 应用开发）</a><ul>
+<li><a href="#学习路线表8-小时">学习路线表（8 小时）</a></li>
+<li><a href="#第-1-阶段第-1-小时环境与依赖-python-vs-java-差异">第 1 阶段（第 1 小时）：环境与依赖 + Python vs Java 差异</a></li>
+<li><a href="#第-2-阶段第-2-小时类型标注-数据结构-推导式">第 2 阶段（第 2 小时）：类型标注 + 数据结构 + 推导式</a></li>
+<li><a href="#第-3-阶段第-3-小时函数装饰器-类dataclass">第 3 阶段（第 3 小时）：函数/装饰器 + 类/dataclass</a></li>
+<li><a href="#第-4-阶段第-4-小时文件json-httpx-async">第 4 阶段（第 4 小时）：文件/JSON + httpx + async</a></li>
+<li><a href="#第-5-阶段第-5-小时numpy-必学-pandas-选学">第 5 阶段（第 5 小时）：NumPy 必学 / Pandas 选学</a></li>
+<li><a href="#第-6-阶段第-6-小时llm-api-调用-embedding-最小-rag">第 6 阶段（第 6 小时）：LLM API 调用 + embedding + 最小 RAG</a></li>
+<li><a href="#第-7-阶段第-7-小时fastapi-pytest">第 7 阶段（第 7 小时）：FastAPI + pytest</a></li>
+<li><a href="#第-8-阶段第-8-小时综合项目-坑汇总-自测清单">第 8 阶段（第 8 小时）：综合项目 + 坑汇总 + 自测清单</a></li>
+<li><a href="#附录验证环境与方法">附录：验证环境与方法</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</details>
+<blockquote>
+<p>面向 10 年 Java 经验、Python 零基础的工程师。目标不是"学会 Python"，而是：<strong>能读懂 AI 代码、能写 LLM 应用、能测试</strong>。</p>
+<p>全天贯穿同一个案例：搭一个「对话 → 调 LLM → 检索知识 → 回答」的服务，每个模块的练习都往这个服务上添一块砖。</p>
+<p><strong>验证标注</strong>：✅ = 实测通过（验证环境见附录）；🔑 = 需要真实 API Key，代码接线已验证、网络调用未实测。</p>
+<p>节奏：每小时约 50 分钟读 + 10 分钟动手。常见坑随阶段分散讲，第 8 阶段汇总。</p>
+<p>配套可运行代码在仓库 <code>code/</code> 目录（rag.py / chat_app.py / app.py + 测试）：<code>cd code &amp;&amp; uv sync &amp;&amp; uv run pytest -q</code> 即可复现文中 ✅ 结果。</p>
+</blockquote>
+<p><strong>结论前置</strong>：你只需要一张映射表 + 一天肌肉记忆纠正：</p>
+<table>
+<thead>
+<tr>
+<th>你的 Java 存量</th>
+<th>Python AI 开发对应物</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>JDK + javac 编译</td>
+<td>CPython 解释器（3.12，无编译步骤）</td>
+</tr>
+<tr>
+<td>Maven + pom.xml</td>
+<td>uv + pyproject.toml</td>
+</tr>
+<tr>
+<td>Lombok <code>@Data</code></td>
+<td><code>@dataclass</code></td>
+</tr>
+<tr>
+<td>Jackson</td>
+<td><code>json</code> 模块 / pydantic</td>
+</tr>
+<tr>
+<td>OkHttp / WebClient</td>
+<td>httpx</td>
+</tr>
+<tr>
+<td>Spring Boot</td>
+<td>FastAPI</td>
+</tr>
+<tr>
+<td>JUnit</td>
+<td>pytest</td>
+</tr>
+<tr>
+<td>泛型 + 编译期检查</td>
+<td>类型标注 + pyright（<strong>运行时不强制</strong>，这是最大思维转变）</td>
+</tr>
+</tbody>
+</table>
+<h2 id="学习路线表8-小时">学习路线表（8 小时）</h2>
+<table>
+<thead>
+<tr>
+<th>小时</th>
+<th>阶段</th>
+<th>模块</th>
+<th>Java 类比</th>
+<th>动手产出</th>
+<th>必/选</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>P1</td>
+<td>环境依赖 + 语法差异</td>
+<td>JDK / Maven</td>
+<td>项目骨架 + 消息处理脚本</td>
+<td>必学</td>
+</tr>
+<tr>
+<td>2</td>
+<td>P2</td>
+<td>类型标注 + list/dict/set/tuple + 推导式</td>
+<td>泛型 / Stream API</td>
+<td>消息过滤与 token 统计</td>
+<td>必学</td>
+</tr>
+<tr>
+<td>3</td>
+<td>P3</td>
+<td>函数/装饰器 + 类/dataclass</td>
+<td>Lambda / AOP / Lombok</td>
+<td><code>ChatMessage</code> dataclass + <code>@retry</code> 装饰器</td>
+<td>必学（带参装饰器选学）</td>
+</tr>
+<tr>
+<td>4</td>
+<td>P4</td>
+<td>文件/JSON + httpx + async</td>
+<td>Jackson / OkHttp / CompletableFuture</td>
+<td>对话落盘 + 调真实 HTTP API</td>
+<td>必学（asyncio 深水区选学）</td>
+</tr>
+<tr>
+<td>5</td>
+<td>P5</td>
+<td>NumPy / Pandas</td>
+<td>无直接对应，当"数组版 Stream"</td>
+<td>手写余弦相似度</td>
+<td>NumPy 必学，Pandas 选学</td>
+</tr>
+<tr>
+<td>6</td>
+<td>P6</td>
+<td>LLM API + embedding + 最小 RAG</td>
+<td>JDBC（兼容协议）</td>
+<td>30 行 numpy 版 RAG</td>
+<td>必学</td>
+</tr>
+<tr>
+<td>7</td>
+<td>P7</td>
+<td>FastAPI + pytest</td>
+<td>Spring Boot / JUnit</td>
+<td><code>/chat</code> 接口 + 单测</td>
+<td>必学</td>
+</tr>
+<tr>
+<td>8</td>
+<td>P8</td>
+<td>综合项目 + 坑汇总 + 自测清单</td>
+<td>—</td>
+<td>FastAPI + LLM + RAG 问答服务</td>
+<td>必学</td>
+</tr>
+</tbody>
+</table>
+<p>P6 需要一个 OpenAI 兼容 API Key（通义 / DeepSeek / OpenAI 任一）。<strong>没有 Key 不阻塞</strong>：全天代码内置 mock 双实现，无 Key 也能跑通完整管道。</p>
+<hr />
+<h2 id="第-1-阶段第-1-小时环境与依赖-python-vs-java-差异">第 1 阶段（第 1 小时）：环境与依赖 + Python vs Java 差异</h2>
+<h3 id="11-环境与依赖必学约-25-分钟">1.1 环境与依赖【必学，约 25 分钟】</h3>
+<p><strong>一句话原理</strong>：Java 依赖全局共享（<code>~/.m2</code>），靠每个项目的 classpath 隔离；Python 依赖直接装进"解释器所在目录"，两个项目要用同一个库的不同版本就会打架 → <strong>每个项目自带一个 <code>.venv</code>（独立解释器 + 独立依赖目录）</strong>。uv 就是管这一切的 Maven，且比 pip 快一个数量级。</p>
+<table>
+<thead>
+<tr>
+<th>Java</th>
+<th>Python（uv）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>装 JDK</td>
+<td>装 Python（uv 自动下载管理，无需手动装）</td>
+</tr>
+<tr>
+<td><code>mvn archetype:generate</code></td>
+<td><code>uv init</code></td>
+</tr>
+<tr>
+<td>pom.xml <code>&lt;dependencies&gt;</code></td>
+<td>pyproject.toml <code>dependencies</code></td>
+</tr>
+<tr>
+<td>加依赖 + <code>mvn install</code></td>
+<td><code>uv add httpx</code></td>
+</tr>
+<tr>
+<td><code>~/.m2</code> 全局仓库</td>
+<td>每项目 <code>.venv</code></td>
+</tr>
+<tr>
+<td><code>mvn exec:java</code> / <code>java -jar</code></td>
+<td><code>uv run python main.py</code></td>
+</tr>
+<tr>
+<td><code>mvn test</code></td>
+<td><code>uv run pytest</code></td>
+</tr>
+<tr>
+<td>Gradle lockfile</td>
+<td><code>uv.lock</code>（自动生成，提交进 git）</td>
+</tr>
+</tbody>
+</table>
+<p>命令（macOS，一次装好全天依赖）：</p>
+<div class="highlight"><pre><span></span><code>brew<span class="w"> </span>install<span class="w"> </span>uv<span class="w">                       </span><span class="c1"># 已装可跳过；无 brew 用: curl -LsSf https://astral.sh/uv/install.sh | sh</span>
+uv<span class="w"> </span>init<span class="w"> </span>--python<span class="w"> </span><span class="m">3</span>.12<span class="w"> </span>ai-quickstart<span class="w">   </span><span class="c1"># macOS 系统 Python 常是 3.9，必须显式指定 3.12，uv 会自动下载</span>
+<span class="nb">cd</span><span class="w"> </span>ai-quickstart
+uv<span class="w"> </span>add<span class="w"> </span>httpx<span class="w"> </span>openai<span class="w"> </span>fastapi<span class="w"> </span><span class="s2">"uvicorn[standard]"</span><span class="w"> </span>numpy<span class="w"> </span>pandas<span class="w"> </span>pytest
+uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>main.py<span class="w">                 </span><span class="c1"># 铁律：永远 uv run，不要直接 python</span>
+</code></pre></div>
+
+<p><code>uv run</code> 自动做两件事：定位/创建 <code>.venv</code> + 按 <code>uv.lock</code> 同步依赖。<strong>不需要</strong>老教程里的 <code>source .venv/bin/activate</code>。</p>
+<p>pyproject.toml ≈ pom.xml：</p>
+<div class="highlight"><pre><span></span><code><span class="k">[project]</span>
+<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"ai-quickstart"</span>
+<span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"0.1.0"</span>
+<span class="n">requires-python</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"&gt;=3.12"</span>
+<span class="n">dependencies</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"httpx&gt;=0.27"</span><span class="p">,</span><span class="w"> </span><span class="s2">"openai&gt;=1.40"</span><span class="p">]</span>
+</code></pre></div>
+
+<p>【选学】手动 <code>python -m venv</code> + pip（只为看懂老项目/老教程）；pyenv、conda（训练场景常见，AI <strong>应用</strong>开发 uv 足够）。</p>
+<h3 id="12-语法差异必学约-25-分钟">1.2 语法差异【必学，约 25 分钟】</h3>
+<p>10 条肌肉记忆纠正表：</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Java 习惯</th>
+<th>Python 现实</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>String s = "x";</code></td>
+<td><code>s = "x"</code>，无类型声明、无分号</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>{}</code> 划分代码块</td>
+<td><strong>缩进就是语法</strong>（4 空格，Tab/空格混用直接报错）</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>null</code></td>
+<td><code>None</code>，判空固定写 <code>x is None</code></td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>==</code> 比引用，<code>equals</code> 比值</td>
+<td><strong>正好相反</strong>：<code>==</code> 比值，<code>is</code> 比引用</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>new Foo()</code></td>
+<td><code>Foo()</code>，没有 new</td>
+</tr>
+<tr>
+<td>6</td>
+<td>camelCase</td>
+<td>snake_case（PEP8 规范）</td>
+</tr>
+<tr>
+<td>7</td>
+<td><code>String.format</code> / <code>+</code> 拼接</td>
+<td>f-string：<code>f"{model} 轮数={len(msgs)}"</code></td>
+</tr>
+<tr>
+<td>8</td>
+<td>int 溢出换 long / BigInteger</td>
+<td>int 任意精度，随便乘</td>
+</tr>
+<tr>
+<td>9</td>
+<td><code>5/2 == 2</code></td>
+<td><code>5/2 == 2.5</code>（永远 float），整除用 <code>5//2 == 2</code></td>
+</tr>
+<tr>
+<td>10</td>
+<td>编译器兜底</td>
+<td>无编译，属性名拼错<strong>运行时才炸</strong> → 类型标注 + 测试是你的新兜底</td>
+</tr>
+</tbody>
+</table>
+<p>可运行示例 ✅（AI 场景：构造 LLM 请求消息）。存为 <code>main.py</code>，<code>uv run python main.py</code>：</p>
+<div class="highlight"><pre><span></span><code><span class="n">model</span> <span class="o">=</span> <span class="s2">"qwen-plus"</span>
+<span class="n">max_tokens</span> <span class="o">=</span> <span class="mi">1024</span>
+<span class="n">temperature</span> <span class="o">=</span> <span class="mf">0.7</span>
+
+<span class="c1"># dict ≈ HashMap，list ≈ ArrayList；字面量长得就是 JSON</span>
+<span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"system"</span><span class="p">,</span> <span class="s2">"content"</span><span class="p">:</span> <span class="s2">"你是资深Java导师"</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"user"</span><span class="p">,</span> <span class="s2">"content"</span><span class="p">:</span> <span class="s2">"Python的dict相当于Java的什么?"</span><span class="p">},</span>
+<span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"model=</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s2">, turns=</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">messages</span><span class="p">)</span><span class="si">}</span><span class="s2">, temp=</span><span class="si">{</span><span class="n">temperature</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># enumerate ≈ IntStream.range + get，一次拿到索引和元素</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">msg</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">messages</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"[</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">msg</span><span class="p">[</span><span class="s1">'role'</span><span class="p">]</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">msg</span><span class="p">[</span><span class="s1">'content'</span><span class="p">][:</span><span class="mi">20</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>   <span class="c1"># [:20] ≈ substring(0, 20)</span>
+
+<span class="c1"># 真值判断：None/0/""/[]/{} 都算 False ≈ 自动帮你做了 null + isEmpty 检查</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">messages</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"空对话"</span><span class="p">)</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"user"</span><span class="p">}]</span>
+<span class="n">b</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"user"</span><span class="p">}]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">a</span> <span class="o">==</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span> <span class="ow">is</span> <span class="n">b</span><span class="p">)</span>        <span class="c1"># True False —— == 是 equals，is 才是 Java 的 ==</span>
+
+<span class="n">reply</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="k">if</span> <span class="n">reply</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>            <span class="c1"># 判空固定写法</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"还没调用LLM"</span><span class="p">)</span>
+
+<span class="c1"># 函数预览（P3 细讲）：def ≈ 方法；标注 ≈ 泛型提示，但运行时不强制</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">estimate_tokens</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span>    <span class="c1"># 粗估 token 数，顺便演示 // 整除</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">estimate_tokens</span><span class="p">(</span><span class="s2">"你好世界"</span><span class="p">))</span>   <span class="c1"># 2</span>
+</code></pre></div>
+
+<p>实测输出：</p>
+<div class="highlight"><pre><span></span><code>model=qwen-plus, turns=2, temp=0.7
+[0] system: 你是资深Java导师
+[1] user: Python的dict相当于Java的什
+True False
+还没调用LLM
+2
+</code></pre></div>
+
+<p>注意第 2 条被 <code>[:20]</code> 截断了——切片就是 <code>substring</code>，这是真实行为不是 bug。</p>
+<p>【选学】<code>match</code> 语句（≈ switch，3.10+）、海象运算符 <code>:=</code>。swap 不用临时变量 <code>a, b = b, a</code> 顺手记一下即可。</p>
+<h3 id="13-本阶段常见坑">1.3 本阶段常见坑</h3>
+<ol>
+<li><strong>直接 <code>python main.py</code></strong> → 用到系统老解释器，报 <code>ModuleNotFoundError</code> 或语法错。永远 <code>uv run python main.py</code>。</li>
+<li><strong>Tab/空格混用</strong> → <code>TabError</code>。编辑器统一设 4 空格。</li>
+<li><strong><code>if not x</code> 误伤</strong>：<code>0</code> 和 <code>""</code> 也是 falsy。数值判空要显式写 <code>if x is None</code>，别照搬 Java 的 <code>if (x != null)</code> 肌肉记忆。</li>
+<li><strong>用 <code>is</code> 比值</strong>：<code>if reply is "ok"</code> 因字符串驻留偶尔"能跑"，换个值就错。比值永远 <code>==</code>，<code>is</code> 只用于 <code>None</code>。</li>
+<li><strong>没有编译期报错</strong>：Java 里 IDE 红线救你的场景，Python 全拖到运行时 → P2 类型标注、P7 pytest 是必修课不是选修课。</li>
+</ol>
+<h3 id="动手任务-自测10-分钟">动手任务 + 自测（10 分钟）</h3>
+<p>任务：</p>
+<ol>
+<li>跑上面 4 条命令建项目，把示例存进 <code>main.py</code> 跑通。</li>
+<li>把 <code>a == b</code> 改成 <code>a is b</code>，先预测输出再验证。</li>
+<li>自己写 <code>estimate_cost(tokens: int, price_per_1k: float) -&gt; float</code> 返回调用成本，用 f-string 打印结果。</li>
+</ol>
+<p>自测（能答上即过关）：</p>
+<ul>
+<li>为什么 Python 每项目要 <code>.venv</code>，而 Java 基本不用？</li>
+<li><code>==</code> 和 <code>is</code> 分别对应 Java 的什么？</li>
+<li><code>uv run</code> 帮你做了哪两件事？</li>
+</ul>
+<hr />
+<h2 id="第-2-阶段第-2-小时类型标注-数据结构-推导式">第 2 阶段（第 2 小时）：类型标注 + 数据结构 + 推导式</h2>
+<h3 id="21-类型标注必学约-15-分钟">2.1 类型标注【必学，约 15 分钟】</h3>
+<p><strong>思维转变（本阶段最重要的一句话）</strong>：Java 的类型由 javac 强制执行，写错编译不过；Python 的标注<strong>运行时完全不管</strong>，它是写给 IDE 和静态检查器看的"合同"。兜底链条变成：标注 + pyright（IDE 红线）+ pytest（P7），而不是编译器。</p>
+<table>
+<thead>
+<tr>
+<th>Java</th>
+<th>Python 标注</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>String s</code></td>
+<td><code>s: str</code></td>
+<td>基本类型：<code>int float bool str bytes</code></td>
+</tr>
+<tr>
+<td><code>List&lt;String&gt;</code></td>
+<td><code>list[str]</code></td>
+<td>3.9+ 直接用内置泛型</td>
+</tr>
+<tr>
+<td><code>Map&lt;String, Integer&gt;</code></td>
+<td><code>dict[str, int]</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>Optional&lt;String&gt;</code> / <code>@Nullable</code></td>
+<td><code>str \| None</code></td>
+<td>3.10+ 写法，AI SDK 里大量出现</td>
+</tr>
+<tr>
+<td><code>void</code></td>
+<td><code>-&gt; None</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>Object</code></td>
+<td><code>Any</code>【选学】</td>
+<td>逃生舱，少用</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">estimate_tokens</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span>
+
+<span class="c1"># 返回 (总数, 平均数)：tuple 多返回值，Java 得专门写个 DTO</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">token_stats</span><span class="p">(</span><span class="n">msgs</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+    <span class="n">counts</span> <span class="o">=</span> <span class="p">[</span><span class="n">estimate_tokens</span><span class="p">(</span><span class="n">m</span><span class="p">[</span><span class="s2">"content"</span><span class="p">])</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">msgs</span><span class="p">]</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">counts</span><span class="p">),</span> <span class="nb">sum</span><span class="p">(</span><span class="n">counts</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">counts</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">last_reply</span><span class="p">(</span><span class="n">msgs</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>   <span class="c1"># ≈ Optional&lt;String&gt;</span>
+    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">msgs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">m</span><span class="p">[</span><span class="s2">"role"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"assistant"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">m</span><span class="p">[</span><span class="s2">"content"</span><span class="p">]</span>
+    <span class="k">return</span> <span class="kc">None</span>
+</code></pre></div>
+
+<p>工具链：IDE 装 Pylance/pyright ≈ Java IDE 的实时 inspection【必学，装好就行】；mypy 命令行严格模式 ≈ 额外一道 javac【选学】。</p>
+<p>【选学，读懂即可】老代码里的 <code>typing.List / Dict / Optional</code>（3.9 前写法，等价于内置泛型）；<code>TypedDict</code>——给 dict 定形状，运行时仍是普通 dict，≈ 只存在于编译期的 DTO 接口：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TypedDict</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ChatMessage</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+    <span class="n">role</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">content</span><span class="p">:</span> <span class="nb">str</span>
+</code></pre></div>
+
+<h3 id="22-四大容器必学约-25-分钟">2.2 四大容器【必学，约 25 分钟】</h3>
+<p>选型表（AI 场景直接对号入座）：</p>
+<table>
+<thead>
+<tr>
+<th>Python</th>
+<th>Java</th>
+<th>可变?</th>
+<th>AI 应用里装什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>list</code></td>
+<td>ArrayList</td>
+<td>可变</td>
+<td>messages 对话历史、chunks 文档块</td>
+</tr>
+<tr>
+<td><code>dict</code></td>
+<td><strong>LinkedHashMap</strong>（保插入序）</td>
+<td>可变</td>
+<td>单条消息、JSON 请求体、配置</td>
+</tr>
+<tr>
+<td><code>tuple</code></td>
+<td>不可变 List / record</td>
+<td>不可变</td>
+<td>多返回值、(model, temp) 参数对</td>
+</tr>
+<tr>
+<td><code>set</code></td>
+<td>HashSet</td>
+<td>可变</td>
+<td>检索结果去重、停用词表</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><span class="c1"># ---- list ≈ ArrayList ----</span>
+<span class="n">messages</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"user"</span><span class="p">,</span> <span class="s2">"content"</span><span class="p">:</span> <span class="s2">"你好"</span><span class="p">}]</span>
+<span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"user"</span><span class="p">,</span> <span class="s2">"content"</span><span class="p">:</span> <span class="s2">"解释RAG"</span><span class="p">})</span>  <span class="c1"># add</span>
+<span class="n">messages</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>          <span class="c1"># 最后一个！Java 要 get(size()-1)</span>
+<span class="n">messages</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>         <span class="c1"># subList(1,3)，含头不含尾</span>
+<span class="nb">len</span><span class="p">(</span><span class="n">messages</span><span class="p">)</span>         <span class="c1"># size()</span>
+
+<span class="c1"># ---- dict ≈ LinkedHashMap ----</span>
+<span class="n">msg</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"user"</span><span class="p">,</span> <span class="s2">"content"</span><span class="p">:</span> <span class="s2">"你好"</span><span class="p">}</span>
+<span class="n">msg</span><span class="p">[</span><span class="s2">"role"</span><span class="p">]</span>                 <span class="c1"># 取值；键不存在直接抛 KeyError（不是返回 null！）</span>
+<span class="n">msg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"tool_calls"</span><span class="p">)</span>       <span class="c1"># ≈ map.get，缺失返回 None</span>
+<span class="n">msg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"role"</span><span class="p">,</span> <span class="s2">"user"</span><span class="p">)</span>     <span class="c1"># ≈ getOrDefault</span>
+<span class="n">msg</span><span class="p">[</span><span class="s2">"temperature"</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.7</span>    <span class="c1"># put</span>
+<span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">msg</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>    <span class="c1"># entrySet()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+
+<span class="c1"># ---- tuple：不可变，可当 dict 的键（≈ 重写 hashCode/equals 的值对象）----</span>
+<span class="n">total</span><span class="p">,</span> <span class="n">avg</span> <span class="o">=</span> <span class="n">token_stats</span><span class="p">(</span><span class="n">messages</span><span class="p">)</span>     <span class="c1"># 解构 ≈ record 模式匹配</span>
+
+<span class="c1"># ---- set ≈ HashSet ----</span>
+<span class="n">chunks</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">"id"</span><span class="p">:</span> <span class="s2">"c1"</span><span class="p">},</span> <span class="p">{</span><span class="s2">"id"</span><span class="p">:</span> <span class="s2">"c2"</span><span class="p">},</span> <span class="p">{</span><span class="s2">"id"</span><span class="p">:</span> <span class="s2">"c1"</span><span class="p">}]</span>
+<span class="n">unique_ids</span> <span class="o">=</span> <span class="p">{</span><span class="n">c</span><span class="p">[</span><span class="s2">"id"</span><span class="p">]</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">chunks</span><span class="p">}</span>       <span class="c1"># 去重，in 判断 O(1)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"c1"</span> <span class="ow">in</span> <span class="n">unique_ids</span><span class="p">)</span>                    <span class="c1"># contains</span>
+</code></pre></div>
+
+<p>引用与拷贝（和 Java 语义一致，但写法新）✅：</p>
+<div class="highlight"><pre><span></span><code><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">a</span>          <span class="c1"># 引用赋值，改 b 就是改 a（Java 同款）</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">a</span><span class="p">[:]</span>       <span class="c1"># 浅拷贝 ≈ new ArrayList&lt;&gt;(a)；也可 list(a) / a.copy()</span>
+<span class="n">b</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>    <span class="c1"># [1, 2, 3] [1, 2]</span>
+</code></pre></div>
+
+<h3 id="23-推导式-压缩版-stream-api必学约-15-分钟">2.3 推导式 = 压缩版 Stream API【必学，约 15 分钟】</h3>
+<p>对照表（把 Stream 三段式压成一行）：</p>
+<table>
+<thead>
+<tr>
+<th>Java Stream</th>
+<th>Python</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.map(f).collect(toList())</code></td>
+<td><code>[f(x) for x in xs]</code></td>
+</tr>
+<tr>
+<td><code>.filter(p).collect(toList())</code></td>
+<td><code>[x for x in xs if p(x)]</code></td>
+</tr>
+<tr>
+<td><code>.mapToInt(f).sum()</code></td>
+<td><code>sum(f(x) for x in xs)</code></td>
+</tr>
+<tr>
+<td><code>.anyMatch(p)</code> / <code>.allMatch(p)</code></td>
+<td><code>any(p(x) for x in xs)</code> / <code>all(...)</code>（同样短路）</td>
+</tr>
+<tr>
+<td><code>.collect(toMap(k, v))</code></td>
+<td><code>{k(x): v(x) for x in xs}</code></td>
+</tr>
+<tr>
+<td><code>.collect(toSet())</code></td>
+<td><code>{x for x in xs}</code></td>
+</tr>
+<tr>
+<td><code>.flatMap(...)</code></td>
+<td><code>[y for x in xs for y in x]</code>（从左往右读就是嵌套 for）</td>
+</tr>
+<tr>
+<td><code>Comparator.comparing(f).reversed()</code></td>
+<td><code>sorted(xs, key=f, reverse=True)</code></td>
+</tr>
+</tbody>
+</table>
+<p>AI 实战四连 ✅：</p>
+<div class="highlight"><pre><span></span><code><span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"system"</span><span class="p">,</span> <span class="s2">"content"</span><span class="p">:</span> <span class="s2">"你是Java转AI导师"</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"user"</span><span class="p">,</span> <span class="s2">"content"</span><span class="p">:</span> <span class="s2">"解释一下RAG"</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"assistant"</span><span class="p">,</span> <span class="s2">"content"</span><span class="p">:</span> <span class="s2">"RAG=检索+生成"</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"user"</span><span class="p">,</span> <span class="s2">"content"</span><span class="p">:</span> <span class="s2">"给个代码例子"</span><span class="p">},</span>
+<span class="p">]</span>
+
+<span class="c1"># filter + map：只留用户发言</span>
+<span class="n">user_texts</span> <span class="o">=</span> <span class="p">[</span><span class="n">m</span><span class="p">[</span><span class="s2">"content"</span><span class="p">]</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">messages</span> <span class="k">if</span> <span class="n">m</span><span class="p">[</span><span class="s2">"role"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"user"</span><span class="p">]</span>
+<span class="c1"># ['解释一下RAG', '给个代码例子']</span>
+
+<span class="c1"># anyMatch：对话里有没有工具调用</span>
+<span class="n">has_tool</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span><span class="n">m</span><span class="p">[</span><span class="s2">"role"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"tool"</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">messages</span><span class="p">)</span>   <span class="c1"># False</span>
+
+<span class="c1"># toMap：RAG 的 chunk 索引 id → text（重复键后者覆盖前者，≈ toMap 的 merge）</span>
+<span class="n">index</span> <span class="o">=</span> <span class="p">{</span><span class="n">c</span><span class="p">[</span><span class="s2">"id"</span><span class="p">]:</span> <span class="n">c</span><span class="p">[</span><span class="s2">"text"</span><span class="p">]</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">chunks</span><span class="p">}</span>
+
+<span class="c1"># RAG top-k：按相似度排序取前 2（P6 的核心动作，今天先混个脸熟）</span>
+<span class="n">scored</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">"text"</span><span class="p">:</span> <span class="s2">"RAG定义"</span><span class="p">,</span> <span class="s2">"score"</span><span class="p">:</span> <span class="mf">0.9</span><span class="p">},</span>
+          <span class="p">{</span><span class="s2">"text"</span><span class="p">:</span> <span class="s2">"无关内容"</span><span class="p">,</span> <span class="s2">"score"</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">},</span>
+          <span class="p">{</span><span class="s2">"text"</span><span class="p">:</span> <span class="s2">"RAG流程"</span><span class="p">,</span> <span class="s2">"score"</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">}]</span>
+<span class="n">top2</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">scored</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">c</span><span class="p">[</span><span class="s2">"score"</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)[:</span><span class="mi">2</span><span class="p">]</span>
+<span class="c1"># ['RAG定义', 'RAG流程']</span>
+</code></pre></div>
+
+<p><code>sum(...)</code> 里那个不带方括号的叫<strong>生成器表达式</strong>：惰性求值，不建中间列表——Stream 流水线本身也是惰性的，同一个思想。<code>lambda</code> 先当"单行匿名函数"用，P3 细讲。</p>
+<p>flatMap 式嵌套【必学，RAG 切块会用】：<code>[chunk for doc in docs for chunk in doc["chunks"]]</code>。</p>
+<p>【选学】<code>zip(a, b)</code> 把两个列表按位配对（≈ 手写 IntStream 拉链）；<code>enumerate</code> 你在 P1 已用过。</p>
+<h3 id="24-本阶段常见坑">2.4 本阶段常见坑</h3>
+<ol>
+<li><strong><code>msg["缺失键"]</code> 抛 KeyError</strong>，不像 Java <code>map.get</code> 返回 null。不确定有没有的键一律 <code>.get()</code>。</li>
+<li><strong>标注不校验</strong>：<code>estimate_tokens(123)</code> 运行时照样传进去，直到 <code>len(123)</code> 才炸。边界校验靠 P7 的 pydantic，标注只防君子。</li>
+<li><strong><code>[[]] * 3</code> 是 3 个引用指向同一个 list</strong>（实测：<code>grid[0].append(1)</code> 后三个全变 <code>[[1],[1],[1]]</code>）。≈ <code>Arrays.fill</code> 填了同一个对象。要独立副本写 <code>[[] for _ in range(3)]</code>。</li>
+<li><strong><code>b = a</code> 不是拷贝</strong>；浅拷贝 <code>a[:]</code> 也只拷外壳，嵌套结构要 <code>copy.deepcopy</code>【选学】。</li>
+<li><strong>set 去重会丢顺序</strong>；要保序去重用 <code>list(dict.fromkeys(xs))</code>【选学 trick】。</li>
+<li><strong>dict 保插入序</strong>（3.7+），别拿 HashMap 的"无序"直觉来推理。</li>
+</ol>
+<h3 id="动手任务-自测10-分钟_1">动手任务 + 自测（10 分钟）</h3>
+<p>任务：在项目里新建 <code>chat_stats.py</code>，自己实现三个函数并跑通——</p>
+<ol>
+<li><code>user_texts(messages) -&gt; list[str]</code>：filter+map 只留用户发言</li>
+<li><code>token_stats(messages) -&gt; tuple[int, float]</code>：总 token 与平均 token（用上面的粗估法）</li>
+<li><code>top_k(scored: list[dict], k: int) -&gt; list[dict]</code>：按 score 取前 k</li>
+</ol>
+<p>对答案：用文中 messages，<code>token_stats</code> 应输出 <code>(15, 3.75)</code>。</p>
+<p>自测：</p>
+<ul>
+<li>Python 标注和 Java 泛型的本质区别？各由谁检查？</li>
+<li><code>msg["x"]</code> 和 <code>msg.get("x")</code> 哪个才对应 Java 的 <code>map.get</code>？</li>
+<li>把 <code>[f(x) for x in xs if p(x)]</code> 翻译成 Stream 调用链。</li>
+<li>为什么 <code>[[]] * 3</code> 会共享同一个 list？</li>
+</ul>
+<hr />
+<h2 id="第-3-阶段第-3-小时函数装饰器-类dataclass">第 3 阶段（第 3 小时）：函数/装饰器 + 类/dataclass</h2>
+<h3 id="31-函数一等公民必学约-20-分钟">3.1 函数：一等公民【必学，约 20 分钟】</h3>
+<p><strong>思维转变</strong>：Java 方法必须寄生在类里，函数式能力是受限的 Lambda；Python 函数本身就是对象，能赋值、传参、返回、被包一层再还回来——装饰器全靠这个能力。</p>
+<table>
+<thead>
+<tr>
+<th>Java</th>
+<th>Python</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>方法重载（同名不同参）</td>
+<td><strong>没有重载</strong>！用默认参数 + 关键字参数替代</td>
+</tr>
+<tr>
+<td>Builder 一堆 setter</td>
+<td><code>def f(x, model="qwen-plus", temp=0.7)</code> 默认参数</td>
+</tr>
+<tr>
+<td><code>varargs Object...</code></td>
+<td><code>*args</code>（收位置参数成 tuple）</td>
+</tr>
+<tr>
+<td><code>Map&lt;String,Object&gt; options</code></td>
+<td><code>**kwargs</code>（收关键字参数成 dict）</td>
+</tr>
+<tr>
+<td><code>Function&lt;T,R&gt;</code> / 策略模式</td>
+<td>直接把函数当参数传</td>
+</tr>
+<tr>
+<td>单表达式 Lambda</td>
+<td><code>lambda x: x + 1</code></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><span class="c1"># 默认参数 + 关键字参数 ≈ 重载 + Builder 合体</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">build_messages</span><span class="p">(</span><span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">system</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"你是AI助手"</span><span class="p">,</span>
+                   <span class="n">history</span><span class="p">:</span> <span class="nb">list</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="n">history</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>          <span class="c1"># 为什么不用 history=[]？见下方头号大坑</span>
+        <span class="n">history</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">return</span> <span class="p">[{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"system"</span><span class="p">,</span> <span class="s2">"content"</span><span class="p">:</span> <span class="n">system</span><span class="p">},</span>
+            <span class="o">*</span><span class="n">history</span><span class="p">,</span>            <span class="c1"># * 解包 ≈ addAll</span>
+            <span class="p">{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"user"</span><span class="p">,</span> <span class="s2">"content"</span><span class="p">:</span> <span class="n">prompt</span><span class="p">}]</span>
+
+<span class="c1"># **kwargs：调用方随意追加选项；{**a, **b} 合并 dict ≈ putAll（后者覆盖）</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">make_params</span><span class="p">(</span><span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">"model"</span><span class="p">:</span> <span class="s2">"qwen-plus"</span><span class="p">,</span> <span class="s2">"messages"</span><span class="p">:</span> <span class="n">build_messages</span><span class="p">(</span><span class="n">prompt</span><span class="p">),</span> <span class="o">**</span><span class="n">options</span><span class="p">}</span>
+
+<span class="n">make_params</span><span class="p">(</span><span class="s2">"解释RAG"</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">max_tokens</span><span class="o">=</span><span class="mi">512</span><span class="p">)</span>
+<span class="c1"># 实测输出：{'model': 'qwen-plus', 'messages': [...], 'temperature': 0.1, 'max_tokens': 512}</span>
+</code></pre></div>
+
+<p>这不是玩具写法——P6 调 LLM 就是 <code>client.chat.completions.create(**params)</code>，把 dict 解包成关键字参数。今天先练熟。</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 函数当参数 ≈ 策略模式，不用定义接口</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">estimate_tokens</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">count</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">counter</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>   <span class="c1"># counter 标注 Callable[[str], int]【选学】</span>
+    <span class="k">return</span> <span class="n">counter</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+
+<span class="n">count</span><span class="p">(</span><span class="s2">"你好世界"</span><span class="p">,</span> <span class="n">estimate_tokens</span><span class="p">)</span>      <span class="c1"># 2</span>
+</code></pre></div>
+
+<p><strong>头号大坑现场演示</strong> ✅：</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">bad_append</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">history</span><span class="o">=</span><span class="p">[]):</span>    <span class="c1"># 默认值在 def 时创建一次，所有调用共享！</span>
+    <span class="n">history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">history</span>
+
+<span class="n">bad_append</span><span class="p">(</span><span class="s2">"a"</span><span class="p">)</span>    <span class="c1"># ['a']</span>
+<span class="n">bad_append</span><span class="p">(</span><span class="s2">"b"</span><span class="p">)</span>    <span class="c1"># ['a', 'b']  ← 上次的残留！≈ Java 用 static 字段当默认值</span>
+</code></pre></div>
+
+<p>修复固定式：默认值写 <code>None</code>，函数体内 <code>if history is None: history = []</code>。</p>
+<h3 id="32-装饰器5-行写出一个-aop-切面必学带参装饰器选学约-15-分钟">3.2 装饰器：5 行写出一个 AOP 切面【必学；带参装饰器选学，约 15 分钟】</h3>
+<p><strong>和 Java 注解的本质区别</strong>：<code>@Transactional</code> 是 passive 元数据，靠 Spring 框架扫描才生效；Python 装饰器是<strong>主动的函数包装</strong>，<code>@retry</code> 等价于 <code>f = retry(f)</code>，定义当场生效，不需要任何框架。你写的每个 <code>@app.get</code>、<code>@pytest.fixture</code> 都是这个原理。</p>
+<p>LLM 调用天天遇到限流/超时，手写一个重试切面 ✅（<code>try/except ≈ try/catch</code>，<code>raise ≈ throw</code>，P4 细讲）：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">wraps</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">retry</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>                          <span class="c1"># 收一个函数</span>
+    <span class="nd">@wraps</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>                          <span class="c1"># 保留原函数名/文档，FastAPI、pytest 靠它做内省</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>       <span class="c1"># 还一个包装后的函数（闭包 ≈ 捕获变量的 lambda）</span>
+        <span class="k">for</span> <span class="n">attempt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">attempt</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="k">raise</span>               <span class="c1"># 最后一次仍失败，原样抛出</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span> <span class="o">*</span> <span class="p">(</span><span class="n">attempt</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>   <span class="c1"># 生产用指数退避 0.5 * 2**attempt</span>
+    <span class="k">return</span> <span class="n">wrapper</span>
+
+<span class="n">calls</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"n"</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+
+<span class="nd">@retry</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">fake_llm</span><span class="p">(</span><span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">calls</span><span class="p">[</span><span class="s2">"n"</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">calls</span><span class="p">[</span><span class="s2">"n"</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TimeoutError</span><span class="p">(</span><span class="s2">"限流"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">"回答:</span><span class="si">{</span><span class="n">prompt</span><span class="si">}</span><span class="s2">"</span>
+
+<span class="n">fake_llm</span><span class="p">(</span><span class="s2">"什么是RAG"</span><span class="p">)</span>
+<span class="c1"># 实测：回答:什么是RAG | 尝试次数: 3 | 函数名: fake_llm</span>
+</code></pre></div>
+
+<p>标准库白送一个实用装饰器——embedding 结果缓存（≈ Guava Cache 包方法）：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">cache</span>
+
+<span class="nd">@cache</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">embed</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>    <span class="c1"># 相同 text 只算一次，重复命中缓存</span>
+    <span class="o">...</span>
+</code></pre></div>
+
+<p>【选学，读懂即可】带参装饰器 <code>@retry(times=5)</code> 是三层嵌套（再包一层收参数）。你不需要会写，但要认识：FastAPI 的 <code>@app.get("/chat")</code>、pytest 的 <code>@pytest.mark.parametrize</code> 全是它。</p>
+<h3 id="33-类与-dataclass必学约-20-分钟">3.3 类与 dataclass【必学，约 20 分钟】</h3>
+<p>普通类 ≈ 去掉 Lombok 的 POJO，<code>self</code> ≈ 显式写出来的 <code>this</code>：</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ChatSession</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"qwen-plus"</span><span class="p">):</span>   <span class="c1"># ≈ 构造器</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>                          <span class="c1"># ≈ this.model = model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">messages</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">role</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="c1"># 实例方法第一个参数永远是 self</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">"role"</span><span class="p">:</span> <span class="n">role</span><span class="p">,</span> <span class="s2">"content"</span><span class="p">:</span> <span class="n">content</span><span class="p">})</span>
+
+<span class="n">s</span> <span class="o">=</span> <span class="n">ChatSession</span><span class="p">()</span>        <span class="c1"># 没有 new</span>
+<span class="n">s</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"user"</span><span class="p">,</span> <span class="s2">"你好"</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">RAGSession</span><span class="p">(</span><span class="n">ChatSession</span><span class="p">):</span>          <span class="c1"># ≈ extends</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">"qwen-plus"</span><span class="p">,</span> <span class="n">top_k</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>         <span class="c1"># ≈ super(model)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">top_k</span> <span class="o">=</span> <span class="n">top_k</span>
+</code></pre></div>
+
+<p><strong>鸭子类型</strong>：没有 <code>implements</code>。只要对象有 <code>complete</code> 方法就能传进去，≈ 结构化接口——"长得像鸭子就行，不用出示鸭子证书"。mock LLM 做测试（P7）全靠它：</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">FakeLLM</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">complete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">"fake:"</span> <span class="o">+</span> <span class="n">prompt</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">ask</span><span class="p">(</span><span class="n">llm</span><span class="p">,</span> <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>   <span class="c1"># 不声明任何接口类型</span>
+    <span class="k">return</span> <span class="n">llm</span><span class="o">.</span><span class="n">complete</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span>
+</code></pre></div>
+
+<p><strong>dataclass ≈ Lombok <code>@Data</code></strong>，AI 代码里 DTO 的标准写法 ✅：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">asdict</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ChatMessage</span><span class="p">:</span>
+    <span class="n">role</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">content</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">tokens</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="n">m</span> <span class="o">=</span> <span class="n">ChatMessage</span><span class="p">(</span><span class="s2">"user"</span><span class="p">,</span> <span class="s2">"解释RAG"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>                              <span class="c1"># 自动 __repr__ ≈ toString</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">m</span> <span class="o">==</span> <span class="n">ChatMessage</span><span class="p">(</span><span class="s2">"user"</span><span class="p">,</span> <span class="s2">"解释RAG"</span><span class="p">))</span>   <span class="c1"># 自动 __eq__ ≈ equals → True</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">asdict</span><span class="p">(</span><span class="n">m</span><span class="p">))</span>                      <span class="c1"># ≈ Jackson convertValue 成 Map，P4 接 JSON</span>
+<span class="c1"># 实测：{'role': 'user', 'content': '解释RAG', 'tokens': 0}</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Session</span><span class="p">:</span>
+    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"qwen-plus"</span>
+    <span class="n">messages</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>   <span class="c1"># 可变默认值必须用工厂！</span>
+</code></pre></div>
+
+<p>要点：</p>
+<ul>
+<li><code>@dataclass</code> 自动生成 <code>__init__</code> / <code>__repr__</code> / <code>__eq__</code> ≈ <code>@Data</code> 三件套；<code>@dataclass(frozen=True)</code> ≈ record / <code>@Value</code> 不可变。</li>
+<li>可变默认值直接写 <code>messages: list = []</code> 会<strong>报错</strong>（dataclass 替你挡了 3.1 的头号坑），必须 <code>field(default_factory=list)</code>——每个实例拿到独立新 list（实测 <code>s1</code> append 后 <code>s2.messages</code> 仍是 <code>[]</code>）。</li>
+<li>双下划线方法 ≈ Object 的协议方法：<code>__str__</code>≈toString、<code>__eq__</code>≈equals、<code>__len__</code>≈让 <code>len()</code> 生效。【选学：<code>__enter__/__exit__</code> 上下文管理器 ≈ try-with-resources，P4 文件会用到】</li>
+</ul>
+<p>选型一句话：<strong>纯数据载体 → dataclass；有状态的服务对象（session、client 封装）→ 普通类；HTTP 边界要校验的输入输出 → pydantic（P7）</strong>。</p>
+<h3 id="34-本阶段常见坑">3.4 本阶段常见坑</h3>
+<ol>
+<li><strong>可变默认参数</strong> <code>def f(x=[])</code>：所有调用共享同一个 list（3.1 已演示）。固定式：<code>None</code> 哨兵。</li>
+<li><strong>没有重载</strong>：写两个同名 <code>def</code>，后一个静默覆盖前一个，不报错。用默认参数。</li>
+<li><strong>忘写 self</strong>：<code>def add(role, content)</code> 调用时 <code>s.add("user","hi")</code> → <code>TypeError: takes 2 positional arguments but 3 given</code>。实例方法第一个参数永远是 self。</li>
+<li><strong>类属性可变共享</strong> ≈ static 字段：<code>class Bad: items = []</code>，实测 <code>b1.items.append(1)</code> 后 <code>b2.items</code> 也是 <code>[1]</code>。实例数据放 <code>__init__</code> 里。</li>
+<li><strong>装饰器忘 <code>@wraps</code></strong>：函数名变成 <code>wrapper</code>，FastAPI 路由内省、pytest 报告全乱。包装函数固定加。</li>
+</ol>
+<h3 id="动手任务-自测10-分钟_2">动手任务 + 自测（10 分钟）</h3>
+<p>任务：新建 <code>models.py</code> + <code>decorators.py</code>——</p>
+<ol>
+<li><code>models.py</code>：<code>ChatMessage</code>、<code>Chunk(id, text, score=0.0)</code> 两个 dataclass；<code>ChatSession</code> 类带 <code>add()</code> 和 <code>payload()</code>（返回可直接发给 LLM 的 dict）。</li>
+<li><code>decorators.py</code>：默写 <code>@retry</code>（不看上文），用"前两次抛异常、第三次成功"的假函数验证。</li>
+<li>用 <code>asdict()</code> 把一条 <code>ChatMessage</code> 转成 dict 打印。</li>
+</ol>
+<p>自测：</p>
+<ul>
+<li>Java 注解和 Python 装饰器的本质区别？<code>@retry</code> 等价于哪行赋值？</li>
+<li><code>def f(msgs=[])</code> 相当于 Java 里犯了什么错？固定修法？</li>
+<li><code>@dataclass</code> 自动生成哪三个方法？对应 Lombok 什么？</li>
+<li>为什么 dataclass 的可变默认值必须 <code>default_factory</code>？</li>
+</ul>
+<hr />
+<h2 id="第-4-阶段第-4-小时文件json-httpx-async">第 4 阶段（第 4 小时）：文件/JSON + httpx + async</h2>
+<h3 id="41-文件与-json必学约-15-分钟">4.1 文件与 JSON【必学，约 15 分钟】</h3>
+<table>
+<thead>
+<tr>
+<th>Java</th>
+<th>Python</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Paths.get("data", "a.json")</code></td>
+<td><code>Path("data") / "a.json"</code>（<code>/</code> 运算符拼路径）</td>
+</tr>
+<tr>
+<td><code>Files.createDirectories</code></td>
+<td><code>p.parent.mkdir(exist_ok=True)</code></td>
+</tr>
+<tr>
+<td><code>Files.readString / writeString</code></td>
+<td><code>p.read_text() / p.write_text()</code></td>
+</tr>
+<tr>
+<td>try-with-resources</td>
+<td><code>with open(...) as f:</code>（自动 close）</td>
+</tr>
+<tr>
+<td>Jackson <code>ObjectMapper</code></td>
+<td><code>json.dumps()</code>（写）/ <code>json.loads()</code>（读）</td>
+</tr>
+</tbody>
+</table>
+<p>对话落盘 + 读回 ✅（串起 P3 的 dataclass）：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">asdict</span>
+
+<span class="n">p</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"data"</span><span class="p">)</span> <span class="o">/</span> <span class="s2">"history.json"</span>
+<span class="n">p</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">msgs</span> <span class="o">=</span> <span class="p">[</span><span class="n">ChatMessage</span><span class="p">(</span><span class="s2">"user"</span><span class="p">,</span> <span class="s2">"解释RAG"</span><span class="p">),</span> <span class="n">ChatMessage</span><span class="p">(</span><span class="s2">"assistant"</span><span class="p">,</span> <span class="s2">"RAG=检索+生成"</span><span class="p">)]</span>
+
+<span class="c1"># 存：dataclass → dict → JSON 字符串 ≈ writeValueAsString</span>
+<span class="n">p</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">([</span><span class="n">asdict</span><span class="p">(</span><span class="n">m</span><span class="p">)</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">msgs</span><span class="p">],</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+             <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span>
+
+<span class="c1"># 取：JSON → dict → dataclass（** 解包就是 P3 学的字典解包）</span>
+<span class="n">loaded</span> <span class="o">=</span> <span class="p">[</span><span class="n">ChatMessage</span><span class="p">(</span><span class="o">**</span><span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">))]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">loaded</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">msgs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>    <span class="c1"># True，dataclass 自动 __eq__</span>
+</code></pre></div>
+
+<p><strong>必记坑</strong>：<code>json.dumps</code> 默认 <code>ensure_ascii=True</code>，中文全变转义（实测）：</p>
+<div class="highlight"><pre><span></span><code><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s2">"q"</span><span class="p">:</span> <span class="s2">"你好"</span><span class="p">})</span>                     <span class="c1"># {"q": "\u4f60\u597d"}</span>
+<span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s2">"q"</span><span class="p">:</span> <span class="s2">"你好"</span><span class="p">},</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># {"q": "你好"}  ← 永远加这个</span>
+</code></pre></div>
+
+<p>【必学小知识点】JSONL：一行一个 JSON，AI 数据集/对话日志的通用格式，追加写友好：</p>
+<div class="highlight"><pre><span></span><code><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="s2">"a"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>    <span class="c1"># "a" 追加；with ≈ try-with-resources</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">asdict</span><span class="p">(</span><span class="n">m</span><span class="p">),</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">+</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="42-httpx-调-api必学约-20-分钟">4.2 httpx 调 API【必学，约 20 分钟】</h3>
+<p>≈ OkHttp 的手感 + RestTemplate 的便利，同步异步都支持（requests 的现代替代，AI 项目标配）。</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">httpx</span>
+
+<span class="n">r</span> <span class="o">=</span> <span class="n">httpx</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"https://httpbin.org/get"</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">"q"</span><span class="p">:</span> <span class="s2">"rag"</span><span class="p">},</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">r</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>        <span class="c1"># 4xx/5xx 抛 HTTPStatusError；不写这行则和 OkHttp 一样不抛！</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">"args"</span><span class="p">])</span>     <span class="c1"># 实测：{'q': 'rag'}；.json() ≈ Jackson readValue 成 Map</span>
+
+<span class="c1"># POST JSON —— 这就是 LLM 请求的形状；json= 自动序列化并设 Content-Type</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">httpx</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">"https://api.example.com/v1/chat/completions"</span><span class="p">,</span>
+               <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">"model"</span><span class="p">:</span> <span class="s2">"qwen-plus"</span><span class="p">,</span>
+                     <span class="s2">"messages"</span><span class="p">:</span> <span class="p">[{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"user"</span><span class="p">,</span> <span class="s2">"content"</span><span class="p">:</span> <span class="s2">"hi"</span><span class="p">}]},</span>
+               <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">"Authorization"</span><span class="p">:</span> <span class="s2">"Bearer sk-..."</span><span class="p">},</span>
+               <span class="n">timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>  <span class="c1"># httpx 默认超时只有 5 秒！LLM 慢响应必须显式调大</span>
+</code></pre></div>
+
+<p>复用连接 ≈ OkHttpClient 单例/连接池：</p>
+<div class="highlight"><pre><span></span><code><span class="k">with</span> <span class="n">httpx</span><span class="o">.</span><span class="n">Client</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+    <span class="n">r1</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url1</span><span class="p">)</span>
+    <span class="n">r2</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url2</span><span class="p">)</span>
+</code></pre></div>
+
+<p>异常处理 ≈ try/catch，一分钟对照：<code>except httpx.TimeoutException as e</code> ≈ <code>catch (IOException e)</code>；<code>raise</code> ≈ <code>throw</code>；<strong>没有 checked exception</strong>，不用声明不用强制接。</p>
+<div class="highlight"><pre><span></span><code><span class="k">try</span><span class="p">:</span>
+    <span class="n">httpx</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+<span class="k">except</span> <span class="n">httpx</span><span class="o">.</span><span class="n">HTTPStatusError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">)</span>     <span class="c1"># 实测捕获 500</span>
+<span class="k">except</span> <span class="n">httpx</span><span class="o">.</span><span class="n">TimeoutException</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"超时"</span><span class="p">)</span>                      <span class="c1"># 实测捕获</span>
+</code></pre></div>
+
+<p>真实 API 练习目标（可直连、无需 Key）：<code>https://wttr.in/Beijing?format=j1</code> 返回 JSON（示例输出 <code>temp_C: "8"</code>）——动手任务用它练"取外部数据给 LLM 当工具结果"。</p>
+<p>环境注：httpx 默认读 <code>HTTP_PROXY/HTTPS_PROXY/NO_PROXY</code> 环境变量（JVM 可不会）。若报代理/<code>InvalidURL</code> 错（某些沙箱/CI 会注入畸形 NO_PROXY），先查环境变量，或 <code>httpx.Client(trust_env=False)</code> 绕过。</p>
+<h3 id="43-asyncawait必学会读会写简单并发asyncio-深水区选学约-15-分钟">4.3 async/await【必学：会读会写简单并发；asyncio 深水区选学，约 15 分钟】</h3>
+<p><strong>心智模型（最重要）</strong>：asyncio 是<strong>单线程事件循环</strong>——所有任务在同一根线程上轮流跑，只在 <code>await</code> 处让出控制权。≈ Netty 的 IO 线程：IO 并发极强，但谁阻塞这根线程，全体请求一起死。</p>
+<table>
+<thead>
+<tr>
+<th>Java</th>
+<th>Python</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>返回 <code>CompletableFuture&lt;T&gt;</code> 的方法</td>
+<td><code>async def f() -&gt; T</code></td>
+</tr>
+<tr>
+<td><code>.join()</code>（阻塞当前线程）</td>
+<td><code>await</code>（让出控制权，不阻塞线程）</td>
+</tr>
+<tr>
+<td><code>allOf(f1, f2).join()</code></td>
+<td><code>await asyncio.gather(f1(), f2())</code></td>
+</tr>
+<tr>
+<td><code>SpringApplication.run</code></td>
+<td><code>asyncio.run(main())</code></td>
+</tr>
+<tr>
+<td>阻塞任务丢线程池</td>
+<td>用异步库；<code>run_in_executor</code>【选学】</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">fake_embed</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+    <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.3</span><span class="p">)</span>          <span class="c1"># 模拟网络 IO</span>
+    <span class="k">return</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.1</span><span class="p">]</span>
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="n">fake_embed</span><span class="p">(</span><span class="s2">"你好"</span><span class="p">),</span> <span class="n">fake_embed</span><span class="p">(</span><span class="s2">"RAG"</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+
+<span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+<span class="c1"># 实测：[[0.2], [0.30000000000000004]]，总耗时 0.30s（串行要 0.6s）</span>
+</code></pre></div>
+
+<p>真实形态（对本地慢接口实测：gather 0.34s vs 串行 0.62s）：</p>
+<div class="highlight"><pre><span></span><code><span class="k">async</span> <span class="k">with</span> <span class="n">httpx</span><span class="o">.</span><span class="n">AsyncClient</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+    <span class="n">rs</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url1</span><span class="p">),</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url2</span><span class="p">))</span>
+</code></pre></div>
+
+<p><strong>阻塞事件循环现场</strong> ✅：把上面的 <code>await asyncio.sleep(0.3)</code> 换成 <code>time.sleep(0.3)</code>，gather 两个任务耗时 <strong>0.61s</strong>——并发全废，因为同步 sleep 霸占了唯一的事件循环线程。这就是"Netty IO 线程上 Thread.sleep"的 Python 版。</p>
+<p>选型一句话：脚本/批处理用同步 httpx 足够；FastAPI 服务（P7）用 async。CPU 密集计算 asyncio 帮不了你（GIL），丢进程池【选学】。</p>
+<h3 id="44-本阶段常见坑">4.4 本阶段常见坑</h3>
+<ol>
+<li><strong><code>ensure_ascii=True</code> 默认值</strong>：中文变 <code>\u4f60\u597d</code>。dumps 永远加 <code>ensure_ascii=False</code>。</li>
+<li><strong>不写 <code>encoding="utf-8"</code></strong>：open/read_text 默认编码跟平台走（Windows 是 GBK），跨平台必炸。显式写。</li>
+<li><strong>json 不认识 dataclass</strong>：<code>json.dumps(m)</code> 直接 TypeError，先 <code>asdict()</code>；<code>loads</code> 回来的是 dict 不是对象，用 <code>**</code> 解包还原（或 P7 pydantic）。</li>
+<li><strong>忘 <code>raise_for_status()</code></strong>：500 的错误体被 <code>.json()</code> 当正常数据解析，静默脏数据。RestTemplate 肌肉记忆的人会忘。</li>
+<li><strong>httpx 默认超时 5s</strong>：LLM 响应经常超，显式 <code>timeout=60</code>；流式响应更大或按读超时单独设。</li>
+<li><strong>async def 里放同步阻塞</strong>（time.sleep / 同步 httpx / 大循环计算）：整个事件循环冻结，实测并发退化为串行。</li>
+</ol>
+<h3 id="动手任务-自测10-分钟_3">动手任务 + 自测（10 分钟）</h3>
+<p>任务：</p>
+<ol>
+<li><code>history.py</code>：用 pathlib + json 把 P3 的 <code>ChatMessage</code> 列表落盘再读回，断言往返相等。</li>
+<li><code>weather.py</code>：httpx 取 <code>https://wttr.in/Beijing?format=j1</code>，提取 <code>current_condition[0]["temp_C"]</code> 打印——这是 P6"工具结果喂给 LLM"的原型。</li>
+<li>async 版并发取北京 + 上海（<code>wttr.in/Shanghai?format=j1</code>）天气，对比串行耗时。</li>
+</ol>
+<p>自测：</p>
+<ul>
+<li><code>with open</code> ≈ Java 的什么？保证了什么？</li>
+<li><code>json.dumps</code> 为什么必须加 <code>ensure_ascii=False</code>？</li>
+<li><code>await</code> 和 <code>Thread.sleep</code> 的本质区别？为什么后者会杀死并发？</li>
+<li>调 LLM 为什么必须显式调大 timeout？</li>
+</ul>
+<hr />
+<h2 id="第-5-阶段第-5-小时numpy-必学-pandas-选学">第 5 阶段（第 5 小时）：NumPy 必学 / Pandas 选学</h2>
+<h3 id="51-为什么是-numpy必学5-分钟">5.1 为什么是 NumPy【必学，5 分钟】</h3>
+<p>embedding 就是一个 float 数组（向量），RAG 的核心动作是"算向量相似度"。用 list 算要写循环，NumPy 一行搞定且底层是 C——<strong>类比：<code>double[]</code> + 整数组运算符 + JNI 原生数学库的速度，但零胶水代码</strong>。Java 没有直接对应物，把它当"数组版 Stream"学。</p>
+<h3 id="52-ndarray-基础必学约-20-分钟">5.2 ndarray 基础【必学，约 20 分钟】</h3>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">])</span>     <span class="c1"># ≈ double[] 字面量</span>
+<span class="n">a</span><span class="o">.</span><span class="n">shape</span>                            <span class="c1"># (3,) ≈ length；多维时是 (行, 列)</span>
+<span class="n">a</span><span class="o">.</span><span class="n">dtype</span>                            <span class="c1"># float64 ≈ 组件类型</span>
+
+<span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]])</span>   <span class="c1"># ≈ double[][]</span>
+<span class="n">m</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>        <span class="c1"># 取第 1 列 [2 5]！Java 要写循环；: 表示"这一维全要"</span>
+<span class="n">m</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>        <span class="c1"># ≈ m[0][2]</span>
+</code></pre></div>
+
+<p>整数组运算 ≈ 不用写 lambda 的 <code>map</code> ✅：</p>
+<div class="highlight"><pre><span></span><code><span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">])</span>
+<span class="n">a</span> <span class="o">+</span> <span class="n">b</span>      <span class="c1"># [5. 7. 9.]   逐元素加</span>
+<span class="n">a</span> <span class="o">*</span> <span class="n">b</span>      <span class="c1"># [4. 10. 18.] 逐元素乘（注意！不是矩阵乘）</span>
+<span class="n">a</span> <span class="o">*</span> <span class="mi">2</span>      <span class="c1"># [2. 4. 6.]   标量广播到每个元素</span>
+<span class="n">a</span> <span class="o">@</span> <span class="n">b</span>      <span class="c1"># 32.0         点积/矩阵乘用 @</span>
+</code></pre></div>
+
+<p>聚合 ≈ Stream 终结操作 ✅：</p>
+<div class="highlight"><pre><span></span><code><span class="n">a</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>     <span class="c1"># 6.0  ≈ mapToDouble().sum()</span>
+<span class="n">a</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>    <span class="c1"># 2.0  ≈ averagingDouble</span>
+<span class="n">a</span><span class="o">.</span><span class="n">argmax</span><span class="p">()</span>  <span class="c1"># 2    最大值的下标 —— RAG 选 top-1 就靠它</span>
+</code></pre></div>
+
+<p>布尔索引 ≈ filter，不用 lambda ✅：</p>
+<div class="highlight"><pre><span></span><code><span class="n">scores</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">])</span>
+<span class="n">scores</span><span class="p">[</span><span class="n">scores</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">]</span>        <span class="c1"># [0.9 0.8]</span>
+<span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">scores</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>    <span class="c1"># [0 2 1] 按值降序的"下标"；[::-1] 是反转切片</span>
+</code></pre></div>
+
+<p>【必学一行】真实 embedding 常用 <code>dtype=np.float32</code>（省一半内存）：<code>rng.random(384).astype(np.float32)</code>。</p>
+<h3 id="53-手写余弦相似度必学约-15-分钟rag-的数学地基">5.3 手写余弦相似度【必学，约 15 分钟】——RAG 的数学地基</h3>
+<p>公式：<code>cos(a,b) = a·b / (|a|×|b|)</code>。生活类比：两支箭头方向越接近，语义越像。<strong>类比边界</strong>：余弦只看方向不看长度（所以忽略文档长短），而"方向能否代表语义"完全取决于 embedding 模型的质量——余弦本身不懂语义。</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">cosine</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">x</span> <span class="o">@</span> <span class="n">y</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">y</span><span class="p">)))</span>
+    <span class="c1"># @ = 点积 ≈ 手写 sum(x[i]*y[i])；norm = L2 范数 ≈ sqrt(平方和)</span>
+</code></pre></div>
+
+<p><strong>批量版：一个 query 对全部 chunks 一次算完</strong>——这就是 P6 RAG 检索的核心三行 ✅：</p>
+<div class="highlight"><pre><span></span><code><span class="n">query</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+<span class="n">docs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+    <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span>    <span class="c1"># chunk0: RAG 定义</span>
+    <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>    <span class="c1"># chunk1: 无关内容</span>
+    <span class="p">[</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">],</span>    <span class="c1"># chunk2: RAG 流程</span>
+<span class="p">])</span>
+<span class="n">sims</span> <span class="o">=</span> <span class="n">docs</span> <span class="o">@</span> <span class="n">query</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">docs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">query</span><span class="p">))</span>
+<span class="c1"># 实测：[1.0, 0.0, 0.99484975]</span>
+<span class="n">top2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">sims</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">][:</span><span class="mi">2</span><span class="p">]</span>    <span class="c1"># 实测：[0 2]</span>
+</code></pre></div>
+
+<p><code>axis=1</code> ≈ "沿每一行各算一个范数"——axis 就是"选哪个维度做循环"，0 是跨行（按列），1 是跨列（按行）。P6 会把这里的手造向量换成真实 embedding，代码形状一模一样。</p>
+<h3 id="54-pandas整节选学10-分钟混脸熟">5.4 Pandas【整节选学，10 分钟混脸熟】</h3>
+<p>类比：<strong>内存里的 SQL 表</strong>（≈ <code>List&lt;Map&lt;String,Object&gt;&gt;</code> + groupBy）。AI 应用里它出现在：看评测数据集、清洗 CSV 语料、统计调用日志。最小 RAG 路径用不到，但你会在别人的代码里天天见到这五招：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([{</span><span class="s2">"query"</span><span class="p">:</span> <span class="s2">"什么是RAG"</span><span class="p">,</span> <span class="s2">"score"</span><span class="p">:</span> <span class="mf">0.9</span><span class="p">},</span>
+                   <span class="p">{</span><span class="s2">"query"</span><span class="p">:</span> <span class="s2">"天气"</span><span class="p">,</span> <span class="s2">"score"</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">},</span>
+                   <span class="p">{</span><span class="s2">"query"</span><span class="p">:</span> <span class="s2">"RAG流程"</span><span class="p">,</span> <span class="s2">"score"</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">}])</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">"score"</span><span class="p">]</span>                                  <span class="c1"># SELECT score</span>
+<span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">"score"</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">]</span>                        <span class="c1"># WHERE score &gt; 0.5（实测返回 RAG 两行）</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">"score"</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>                           <span class="c1"># AVG(score) → 0.667</span>
+<span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">"score"</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>   <span class="c1"># ORDER BY score DESC LIMIT 2</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"eval.csv"</span><span class="p">)</span>                      <span class="c1"># 读 CSV 一行搞定</span>
+</code></pre></div>
+
+<p>选型：AI <strong>应用</strong>开发 90% 是 NumPy；Pandas 在"看数据/做评测集"时才上场；训练/数据工程岗才需要深学【超出本课】。</p>
+<h3 id="55-本阶段常见坑全部实测复现">5.5 本阶段常见坑（全部实测复现）</h3>
+<ol>
+<li><strong><code>*</code> 是逐元素乘，<code>@</code> 才是点积</strong>：余弦写成 <code>a*b</code> 不报错、结果静默错。最危险的一个。</li>
+<li><strong>切片是视图不是拷贝</strong>：和 list 正好相反！<code>v = arr[1:3]; v[0]=99</code> 实测把原数组改成 <code>[1 99 3 4]</code>。要独立副本写 <code>arr[1:3].copy()</code>。</li>
+<li><strong>int 数组静默截断</strong>：<code>xi = np.zeros(3, dtype=int); xi[0]=0.9</code> → 实测 <code>[0 0 0]</code>，≈ 强转 (int) 不报错。存 embedding 永远 float。</li>
+<li><strong>shape 广播静默扩维</strong>：<code>(3,) * (3,1)</code> 实测得到 <code>(3,3)</code> 矩阵。结果不对先 <code>print(x.shape)</code>。</li>
+<li><strong>argsort 返回下标不是值</strong>；降序要 <code>[::-1]</code>。</li>
+<li><strong>浮点精度</strong>：实测 <code>cosine(v,v)</code> float64 得 <code>0.9999999999999998</code>，float32 得 <code>1.0000001</code>。断言别写 <code>== 1.0</code>，用近似比较（P7 的 <code>pytest.approx</code>）。</li>
+</ol>
+<h3 id="动手任务-自测10-分钟_4">动手任务 + 自测（10 分钟）</h3>
+<p>任务：</p>
+<ol>
+<li><code>similarity.py</code>：默写 <code>cosine</code> + 批量版，对文中 3 个 chunk 算 top-2，答案应为 <code>[0 2]</code>。</li>
+<li>用 <code>np.random.default_rng(42).random(384)</code> 造一个"假 embedding"，验证自相似 ≈ 1，并解释为什么不精确等于 1。</li>
+<li>【选学】把 P4 的天气结果存成 CSV，用 pandas 读回并过滤。</li>
+</ol>
+<p>自测：</p>
+<ul>
+<li><code>a*b</code> 和 <code>a@b</code> 各是什么？余弦公式用哪个？</li>
+<li>NumPy 切片和 list 切片的本质区别？</li>
+<li><code>axis=1</code> 是什么意思？</li>
+<li>为什么不能断言 <code>cosine(v,v) == 1.0</code>？</li>
+</ul>
+<hr />
+<h2 id="第-6-阶段第-6-小时llm-api-调用-embedding-最小-rag">第 6 阶段（第 6 小时）：LLM API 调用 + embedding + 最小 RAG</h2>
+<h3 id="61-openai-兼容协议与-sdk必学约-15-分钟">6.1 OpenAI 兼容协议与 SDK【必学，约 15 分钟】</h3>
+<p><strong>类比：OpenAI SDK ≈ JDBC API</strong>。各家厂商（通义 / DeepSeek / OpenAI / 月之暗面）≈ 数据库驱动，只要支持"OpenAI 兼容协议"，同一套代码换 <code>base_url</code> + <code>model</code> + <code>api_key</code> 就能跑。这是 AI 应用开发最重要的选型事实：<strong>先按兼容协议写，厂商可插拔</strong>。</p>
+<table>
+<thead>
+<tr>
+<th>Java</th>
+<th>Python LLM 调用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>JDBC API</td>
+<td><code>openai</code> SDK</td>
+</tr>
+<tr>
+<td>MySQL/PG 驱动</td>
+<td>通义 / DeepSeek / OpenAI 兼容端点</td>
+</tr>
+<tr>
+<td>JDBC URL</td>
+<td><code>base_url</code></td>
+</tr>
+<tr>
+<td>方言</td>
+<td><code>model</code> 参数</td>
+</tr>
+<tr>
+<td>强类型 ResultSet DTO</td>
+<td><code>resp.choices[0].message.content</code>（SDK 内部就是 pydantic）</td>
+</tr>
+</tbody>
+</table>
+<p>真实调用 🔑（接线已验证，网络调用需 Key）：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">openai</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAI</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">OpenAI</span><span class="p">(</span>
+    <span class="n">api_key</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"LLM_API_KEY"</span><span class="p">],</span>   <span class="c1"># 密钥走环境变量，绝不写进代码/文档/git</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="s2">"https://dashscope.aliyuncs.com/compatible-mode/v1"</span><span class="p">,</span>  <span class="c1"># 通义；DeepSeek 换 https://api.deepseek.com/v1</span>
+<span class="p">)</span>
+
+<span class="n">resp</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">"qwen-plus"</span><span class="p">,</span>
+    <span class="n">messages</span><span class="o">=</span><span class="p">[{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"user"</span><span class="p">,</span> <span class="s2">"content"</span><span class="p">:</span> <span class="s2">"用一句话解释RAG"</span><span class="p">}],</span>
+    <span class="n">temperature</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+    <span class="n">max_tokens</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">resp</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+</code></pre></div>
+
+<p>流式输出【选学，但产品里常见】🔑：<code>stream=True</code> 后迭代 chunk，≈ SSE / <code>Flux&lt;String&gt;</code>：</p>
+<div class="highlight"><pre><span></span><code><span class="n">stream</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">"qwen-plus"</span><span class="p">,</span> <span class="n">messages</span><span class="o">=</span><span class="n">messages</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">stream</span><span class="p">:</span>
+    <span class="n">delta</span> <span class="o">=</span> <span class="n">chunk</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">delta</span><span class="o">.</span><span class="n">content</span>
+    <span class="k">if</span> <span class="n">delta</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div>
+
+<p>错误处理：<code>openai.RateLimitError</code> / <code>openai.APITimeoutError</code> 都是普通异常，直接套 P3 的 <code>@retry</code>（生产配指数退避）。</p>
+<h3 id="62-密钥管理-mock-双实现必学约-10-分钟">6.2 密钥管理 + mock 双实现【必学，约 10 分钟】</h3>
+<p>规则：<strong>Key 只从环境变量读</strong>（<code>os.environ</code>），代码/文档/git 里永远不出现真实 Key。配合 P3 鸭子类型，写"有 Key 走真实、没 Key 走 mock"的双实现，全天练习不阻塞 ✅：</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">FakeLLM</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">chat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">messages</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"[mock] 已收到 </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">messages</span><span class="p">)</span><span class="si">}</span><span class="s2"> 条消息，最后一条：</span><span class="si">{</span><span class="n">messages</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s1">'content'</span><span class="p">][:</span><span class="mi">40</span><span class="p">]</span><span class="si">}</span><span class="s2">..."</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">OpenAILLM</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">openai</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAI</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span> <span class="o">=</span> <span class="n">OpenAI</span><span class="p">(</span>
+            <span class="n">api_key</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"LLM_API_KEY"</span><span class="p">],</span>
+            <span class="n">base_url</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"LLM_BASE_URL"</span><span class="p">,</span>
+                                    <span class="s2">"https://dashscope.aliyuncs.com/compatible-mode/v1"</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"LLM_MODEL"</span><span class="p">,</span> <span class="s2">"qwen-plus"</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">chat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">messages</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">messages</span><span class="o">=</span><span class="n">messages</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">resp</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">get_llm</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"LLM_API_KEY"</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">OpenAILLM</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"⚠️ 未设置 LLM_API_KEY，使用 FakeLLM（管道演练模式）"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">FakeLLM</span><span class="p">()</span>
+</code></pre></div>
+
+<p>两个类没有共同基类——鸭子类型，<code>llm.chat(messages)</code> 对两者都成立。测试里 mock ≈ Mockito，但零框架。</p>
+<h3 id="63-embedding必学约-10-分钟">6.3 embedding【必学，约 10 分钟】</h3>
+<p>概念：文本 → 定长 float 向量；语义相近 → 方向相近（P5 余弦的用武之地）。</p>
+<p>真实调用 🔑：</p>
+<div class="highlight"><pre><span></span><code><span class="n">resp</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">embeddings</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">"text-embedding-v3"</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="p">[</span><span class="s2">"文本1"</span><span class="p">,</span> <span class="s2">"文本2"</span><span class="p">])</span>
+<span class="n">vecs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">d</span><span class="o">.</span><span class="n">embedding</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">resp</span><span class="o">.</span><span class="n">data</span><span class="p">])</span>   <span class="c1"># shape (2, 1024)</span>
+</code></pre></div>
+
+<p>模型选型（以厂商当前文档为准）：通义 <code>text-embedding-v3</code>（1024 维）、OpenAI <code>text-embedding-3-small</code>（1536 维）。维度和模型绑定，<strong>换模型必须全量重建索引</strong>。</p>
+<p>无 Key 演练用 mock embedding ✅（字符哈希，确定性）：</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">mock_embed</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dim</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">64</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">dim</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">text</span><span class="p">:</span>
+        <span class="n">v</span><span class="p">[</span><span class="nb">ord</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span> <span class="o">%</span> <span class="n">dim</span><span class="p">]</span> <span class="o">+=</span> <span class="mf">1.0</span>
+    <span class="k">return</span> <span class="n">v</span>
+</code></pre></div>
+
+<p><strong>边界（必须清楚）</strong>：字符哈希只度量"字符重叠"，不是语义。它只用于跑通管道形状；真实语义效果必须换真实 embedding 模型，代码形状完全不变。</p>
+<h3 id="64-最小-rag必学约-20-分钟全天核心">6.4 最小 RAG【必学，约 20 分钟】——全天核心</h3>
+<p>RAG = Retrieval-Augmented Generation。生活类比：<strong>开卷考试</strong>——LLM 是考生，检索是翻教材找到相关段落，带着段落答题。为什么用它：缓解幻觉、注入私有知识、比微调便宜。<strong>边界</strong>：检索质量决定上限，查不到就答不对（garbage in, garbage out）。</p>
+<p>管道五步：切块 → embedding → 存索引（numpy 矩阵）→ 检索 top-k → 塞进 prompt。</p>
+<p><code>rag.py</code> 核心代码 ✅（实测，mock 模式）。完整文件 = 文件头 <code>import os</code> + <code>import numpy as np</code> + 6.2 的双实现 + 6.3 的 <code>mock_embed</code> + 本节代码：</p>
+<div class="highlight"><pre><span></span><code><span class="n">KB</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">"RAG（检索增强生成）先从知识库检索相关片段，再交给大模型生成回答，能缓解幻觉并注入私有知识。"</span><span class="p">,</span>
+    <span class="s2">"embedding 把文本映射为定长浮点向量，语义相近的文本向量方向相近，常用余弦相似度衡量。"</span><span class="p">,</span>
+    <span class="s2">"FastAPI 是 Python 的异步 Web 框架，配合 pydantic 做请求校验，自带 /docs 交互式文档。"</span><span class="p">,</span>
+    <span class="s2">"今天北京晴，气温 8 摄氏度，适合出门散步。"</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">build_index</span><span class="p">(</span><span class="n">chunks</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">embed</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">embed</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">chunks</span><span class="p">])</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">retrieve</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">chunks</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">index</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">embed</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">):</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="n">embed</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+    <span class="n">sims</span> <span class="o">=</span> <span class="n">index</span> <span class="o">@</span> <span class="n">q</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">q</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1e-10</span><span class="p">)</span>
+    <span class="n">top</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">sims</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">][:</span><span class="n">k</span><span class="p">]</span>        <span class="c1"># +1e-10 防零向量除零</span>
+    <span class="k">return</span> <span class="p">[(</span><span class="n">chunks</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="nb">float</span><span class="p">(</span><span class="n">sims</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">top</span><span class="p">]</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">rag_answer</span><span class="p">(</span><span class="n">question</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">llm</span><span class="p">,</span> <span class="n">embed</span><span class="p">,</span> <span class="n">chunks</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">]:</span>
+    <span class="n">hits</span> <span class="o">=</span> <span class="n">retrieve</span><span class="p">(</span><span class="n">question</span><span class="p">,</span> <span class="n">chunks</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">embed</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">"[</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">hits</span><span class="p">))</span>
+    <span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"system"</span><span class="p">,</span> <span class="s2">"content"</span><span class="p">:</span> <span class="s2">"只根据提供的资料回答；资料不足就说不知道。"</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"user"</span><span class="p">,</span> <span class="s2">"content"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"资料：</span><span class="se">\n</span><span class="si">{</span><span class="n">context</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">问题：</span><span class="si">{</span><span class="n">question</span><span class="si">}</span><span class="s2">"</span><span class="p">},</span>
+    <span class="p">]</span>
+    <span class="k">return</span> <span class="n">llm</span><span class="o">.</span><span class="n">chat</span><span class="p">(</span><span class="n">messages</span><span class="p">),</span> <span class="n">hits</span>
+</code></pre></div>
+
+<p>实测输出（mock 模式，检索排序正确）：</p>
+<div class="highlight"><pre><span></span><code>Q: 什么是RAG
+  hit 0.408: RAG（检索增强生成）先从知识库检索相关片段，再交...
+  hit 0.235: FastAPI 是 Python 的异步 Web ...
+Q: 怎么衡量语义相似度
+  hit 0.451: embedding 把文本映射为定长浮点向量，语义...
+  hit 0.296: RAG（检索增强生成）先从知识库检索相关片段，再交...
+</code></pre></div>
+
+<p>切块【必学概念，实现选学】：demo 用现成短句；真实文档要切。最简定长滑窗：</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">split_text</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">200</span><span class="p">,</span> <span class="n">overlap</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">text</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="n">size</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">),</span> <span class="n">size</span> <span class="o">-</span> <span class="n">overlap</span><span class="p">)]</span>
+</code></pre></div>
+
+<p>overlap 防止句子被拦腰切断丢语义；真实项目按段落/标题切更好。</p>
+<h3 id="65-本阶段常见坑">6.5 本阶段常见坑</h3>
+<ol>
+<li><strong>Key 硬编码</strong>：进代码/文档/git 就泄露。只走 <code>os.environ</code>；<code>.env</code> 文件进 <code>.gitignore</code>。</li>
+<li><strong>把 mock 当语义</strong>：字符哈希的"相似度"只是字符重叠，演示完必须换真实模型再评估效果。</li>
+<li><strong>零向量除零</strong>：空文本 embedding 是全零，norm=0。分母加 <code>1e-10</code>。</li>
+<li><strong>context 塞太多</strong>：top-k 过大/chunk 过长 → token 爆炸 + 模型"中间遗忘"。k 取 2~5，chunk 200~500 字起步。</li>
+<li><strong>资料是指令吗？不是</strong>：塞进 prompt 的检索内容是<strong>数据</strong>，system prompt 明确"只根据资料回答"。警惕资料里夹带"忽略以上指令"类注入文本。</li>
+<li><strong>换 embedding 模型忘重建索引</strong>：维度/语义空间都变了，旧向量全废。</li>
+</ol>
+<h3 id="动手任务-自测10-分钟_5">动手任务 + 自测（10 分钟）</h3>
+<p>任务：</p>
+<ol>
+<li>把 <code>rag.py</code> 敲进项目跑通（无 Key 即 mock 模式），确认两个 query 的 top-1 命中正确。</li>
+<li>给 KB 加一条你自己的知识，验证能被检索到。</li>
+<li>有 Key：<code>export LLM_API_KEY=...</code> 后重跑，对比真实回答与 mock。</li>
+</ol>
+<p>自测：</p>
+<ul>
+<li>OpenAI 兼容协议为什么像 JDBC？换厂商要改哪三个东西？</li>
+<li>RAG 五步管道是什么？余弦在哪一步？</li>
+<li>mock embedding 的边界是什么？</li>
+<li>为什么 system prompt 要写"只根据资料回答"？</li>
+</ul>
+<hr />
+<h2 id="第-7-阶段第-7-小时fastapi-pytest">第 7 阶段（第 7 小时）：FastAPI + pytest</h2>
+<h3 id="71-fastapi-spring-boot必学约-25-分钟">7.1 FastAPI ≈ Spring Boot【必学，约 25 分钟】</h3>
+<table>
+<thead>
+<tr>
+<th>Spring Boot</th>
+<th>FastAPI</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>@RestController</code></td>
+<td><code>app = FastAPI()</code></td>
+</tr>
+<tr>
+<td><code>@PostMapping("/chat")</code></td>
+<td><code>@app.post("/chat")</code></td>
+</tr>
+<tr>
+<td><code>@RequestBody @Valid</code> DTO</td>
+<td>pydantic <code>BaseModel</code> 参数</td>
+</tr>
+<tr>
+<td><code>@NotBlank</code> / <code>@Size</code></td>
+<td><code>Field(min_length=1, max_length=2000)</code></td>
+</tr>
+<tr>
+<td>内嵌 Tomcat</td>
+<td>uvicorn</td>
+</tr>
+<tr>
+<td>SpringDoc / Swagger</td>
+<td>自带 <code>/docs</code>（零配置）</td>
+</tr>
+<tr>
+<td><code>@Autowired</code></td>
+<td><code>Depends()</code>【选学，认识即可】</td>
+</tr>
+<tr>
+<td><code>application.yml</code></td>
+<td>环境变量 / <code>.env</code>【选学】</td>
+</tr>
+</tbody>
+</table>
+<p><strong>pydantic = DTO + Bean Validation + Jackson 三合一</strong>：声明模型即完成序列化与校验，校验失败自动返回 422 ≈ <code>MethodArgumentNotValidException</code>。</p>
+<p><code>chat_app.py</code> ✅：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">FastAPI</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"AI Quickstart"</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">FakeLLM</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">chat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">messages</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"[mock] 收到问题：</span><span class="si">{</span><span class="n">messages</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s1">'content'</span><span class="p">][:</span><span class="mi">40</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span>
+
+<span class="n">llm</span> <span class="o">=</span> <span class="n">FakeLLM</span><span class="p">()</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ChatRequest</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">question</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">min_length</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">2000</span><span class="p">)</span>      <span class="c1"># ≈ @NotBlank @Size</span>
+    <span class="n">temperature</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>   <span class="c1"># ≈ @DecimalMin/@DecimalMax</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ChatResponse</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">answer</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">"/chat"</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">ChatResponse</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">chat</span><span class="p">(</span><span class="n">req</span><span class="p">:</span> <span class="n">ChatRequest</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ChatResponse</span><span class="p">:</span>
+    <span class="n">answer</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">chat</span><span class="p">([{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"user"</span><span class="p">,</span> <span class="s2">"content"</span><span class="p">:</span> <span class="n">req</span><span class="o">.</span><span class="n">question</span><span class="p">}])</span>
+    <span class="k">return</span> <span class="n">ChatResponse</span><span class="p">(</span><span class="n">answer</span><span class="o">=</span><span class="n">answer</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">"mock"</span><span class="p">)</span>
+</code></pre></div>
+
+<p>运行 ≈ <code>spring-boot:run</code> + devtools 热重载：</p>
+<div class="highlight"><pre><span></span><code>uv<span class="w"> </span>run<span class="w"> </span>uvicorn<span class="w"> </span>chat_app:app<span class="w"> </span>--reload<span class="w"> </span>--port<span class="w"> </span><span class="m">8000</span>
+<span class="c1"># 浏览器开 http://127.0.0.1:8000/docs —— 交互式 Swagger，直接点着玩</span>
+curl<span class="w"> </span>-s<span class="w"> </span>http://127.0.0.1:8000/chat<span class="w"> </span>-H<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span>-d<span class="w"> </span><span class="s1">'{"question":"什么是RAG"}'</span>
+</code></pre></div>
+
+<p><strong>async def vs def（P4 规则落地）</strong>：<code>async def</code> 上事件循环，里面别放阻塞 IO；同步函数写 <code>def</code>，FastAPI 自动丢线程池 ≈ <code>@Async</code>。本例 FakeLLM 无 IO 所以 async 安全；P8 调真实同步 SDK 时改用 <code>def</code>。</p>
+<h3 id="72-pytest-junit必学约-25-分钟">7.2 pytest ≈ JUnit【必学，约 25 分钟】</h3>
+<table>
+<thead>
+<tr>
+<th>JUnit</th>
+<th>pytest</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>@Test</code></td>
+<td><code>def test_xxx():</code>（文件名 <code>test_*.py</code> 自动发现）</td>
+</tr>
+<tr>
+<td><code>Assertions.assertEquals</code></td>
+<td>裸 <code>assert x == y</code></td>
+</tr>
+<tr>
+<td><code>@BeforeEach</code></td>
+<td><code>@pytest.fixture</code></td>
+</tr>
+<tr>
+<td><code>@ParameterizedTest</code></td>
+<td><code>@pytest.mark.parametrize</code></td>
+</tr>
+<tr>
+<td><code>assertEquals(a, b, delta)</code></td>
+<td><code>pytest.approx</code></td>
+</tr>
+<tr>
+<td><code>Mockito.mock</code></td>
+<td>鸭子类型 fake / <code>monkeypatch</code></td>
+</tr>
+<tr>
+<td><code>MockMvc</code></td>
+<td><code>fastapi.testclient.TestClient</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>test_chat_app.py</code> ✅（实测 9 passed，含 P8 的 3 个）：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">fastapi.testclient</span><span class="w"> </span><span class="kn">import</span> <span class="n">TestClient</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">chat_app</span><span class="w"> </span><span class="kn">import</span> <span class="n">app</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rag</span><span class="w"> </span><span class="kn">import</span> <span class="n">cosine</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">TestClient</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>          <span class="c1"># ≈ MockMvc，不起真实端口，直接打 ASGI 应用</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_chat_ok</span><span class="p">():</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">"/chat"</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">"question"</span><span class="p">:</span> <span class="s2">"什么是RAG"</span><span class="p">})</span>
+    <span class="k">assert</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span>
+    <span class="k">assert</span> <span class="s2">"RAG"</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">"answer"</span><span class="p">]</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_chat_empty_question_422</span><span class="p">():</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">"/chat"</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">"question"</span><span class="p">:</span> <span class="s2">""</span><span class="p">})</span>
+    <span class="k">assert</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">422</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_chat_temperature_out_of_range_422</span><span class="p">():</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">"/chat"</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">"question"</span><span class="p">:</span> <span class="s2">"hi"</span><span class="p">,</span> <span class="s2">"temperature"</span><span class="p">:</span> <span class="mf">9.0</span><span class="p">})</span>
+    <span class="k">assert</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">422</span>
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">"question"</span><span class="p">,</span> <span class="p">[</span><span class="s2">"什么是RAG"</span><span class="p">,</span> <span class="s2">"你好"</span><span class="p">])</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_chat_echoes_question</span><span class="p">(</span><span class="n">question</span><span class="p">):</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">"/chat"</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">"question"</span><span class="p">:</span> <span class="n">question</span><span class="p">})</span>
+    <span class="k">assert</span> <span class="n">question</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">"answer"</span><span class="p">]</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_cosine_self</span><span class="p">():</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">])</span>
+    <span class="k">assert</span> <span class="n">cosine</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="o">==</span> <span class="n">pytest</span><span class="o">.</span><span class="n">approx</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>   <span class="c1"># P5 浮点坑的官方解法</span>
+</code></pre></div>
+
+<p>运行 ≈ <code>mvn test</code>：</p>
+<div class="highlight"><pre><span></span><code>uv<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>-q
+<span class="c1"># 实测：9 passed in 0.69s</span>
+</code></pre></div>
+
+<h3 id="73-本阶段常见坑">7.3 本阶段常见坑</h3>
+<ol>
+<li><strong>async def 里调同步 SDK</strong>：真实 LLM 调用是阻塞 IO，会冻结事件循环（P4）。用 <code>def</code> 端点或 <code>AsyncOpenAI</code>【选学】。</li>
+<li><strong>422 不是 bug</strong>：pydantic 校验失败的标准响应，前端要按 422 处理参数错误。</li>
+<li><strong>TestClient 依赖 httpx</strong>：<code>uv add httpx</code> 别忘了（P1 已装）。</li>
+<li><strong><code>--reload</code> 只用于开发</strong>：生产 <code>uvicorn app:app --workers 4</code> ≈ 多实例部署。</li>
+</ol>
+<h3 id="动手任务-自测10-分钟_6">动手任务 + 自测（10 分钟）</h3>
+<p>任务：</p>
+<ol>
+<li>跑起 <code>chat_app.py</code>，在 <code>/docs</code> 里手动发一次请求、故意发空 question 看 422。</li>
+<li>默写 3 个测试：正常、空 question、temperature 越界。</li>
+<li>给 P5 的 <code>cosine</code> 补一个 <code>pytest.approx</code> 测试。</li>
+</ol>
+<p>自测：</p>
+<ul>
+<li>pydantic 一个库干了 Java 哪三个组件的活？</li>
+<li><code>TestClient</code> ≈ Spring 的什么？要起真实端口吗？</li>
+<li>同步 LLM SDK 应该放 <code>async def</code> 还是 <code>def</code> 端点？为什么？</li>
+</ul>
+<hr />
+<h2 id="第-8-阶段第-8-小时综合项目-坑汇总-自测清单">第 8 阶段（第 8 小时）：综合项目 + 坑汇总 + 自测清单</h2>
+<h3 id="81-综合项目fastapi-llm-rag-问答服务必学">8.1 综合项目：FastAPI + LLM + RAG 问答服务【必学】</h3>
+<p>把全天积木拼起来：<code>POST /ask</code> → 检索 top-k → 组 prompt → LLM（真实/mock 自动切换）→ 返回 <strong>answer + sources</strong>（RAG 回答必须可溯源）。</p>
+<p><code>app.py</code> ✅（实测：TestClient + 真实 uvicorn + curl 全通过）：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">FastAPI</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">rag</span><span class="w"> </span><span class="kn">import</span> <span class="n">KB</span><span class="p">,</span> <span class="n">build_index</span><span class="p">,</span> <span class="n">get_llm</span><span class="p">,</span> <span class="n">mock_embed</span><span class="p">,</span> <span class="n">retrieve</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"Java→AI 最小 RAG 服务"</span><span class="p">)</span>
+
+<span class="n">llm</span> <span class="o">=</span> <span class="n">get_llm</span><span class="p">()</span>                          <span class="c1"># 有 LLM_API_KEY 走真实，否则 mock</span>
+<span class="n">index</span> <span class="o">=</span> <span class="n">build_index</span><span class="p">(</span><span class="n">KB</span><span class="p">,</span> <span class="n">mock_embed</span><span class="p">)</span>      <span class="c1"># 启动时建索引；大知识库要持久化/向量库（见 8.4）</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">AskRequest</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">question</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">min_length</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">2000</span><span class="p">)</span>
+    <span class="n">top_k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Source</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">text</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">score</span><span class="p">:</span> <span class="nb">float</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">AskResponse</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">answer</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">sources</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Source</span><span class="p">]</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">"/ask"</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">AskResponse</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">ask</span><span class="p">(</span><span class="n">req</span><span class="p">:</span> <span class="n">AskRequest</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AskResponse</span><span class="p">:</span>        <span class="c1"># 注意：def 不是 async def！</span>
+    <span class="n">hits</span> <span class="o">=</span> <span class="n">retrieve</span><span class="p">(</span><span class="n">req</span><span class="o">.</span><span class="n">question</span><span class="p">,</span> <span class="n">KB</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">mock_embed</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">req</span><span class="o">.</span><span class="n">top_k</span><span class="p">)</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">"[</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">hits</span><span class="p">))</span>
+    <span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"system"</span><span class="p">,</span> <span class="s2">"content"</span><span class="p">:</span> <span class="s2">"只根据提供的资料回答；资料不足就说不知道。"</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"user"</span><span class="p">,</span> <span class="s2">"content"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"资料：</span><span class="se">\n</span><span class="si">{</span><span class="n">context</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">问题：</span><span class="si">{</span><span class="n">req</span><span class="o">.</span><span class="n">question</span><span class="si">}</span><span class="s2">"</span><span class="p">},</span>
+    <span class="p">]</span>
+    <span class="n">answer</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">chat</span><span class="p">(</span><span class="n">messages</span><span class="p">)</span>                 <span class="c1"># 同步 SDK 是阻塞 IO → def 端点，FastAPI 丢线程池</span>
+    <span class="k">return</span> <span class="n">AskResponse</span><span class="p">(</span>
+        <span class="n">answer</span><span class="o">=</span><span class="n">answer</span><span class="p">,</span>
+        <span class="n">sources</span><span class="o">=</span><span class="p">[</span><span class="n">Source</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">score</span><span class="o">=</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">hits</span><span class="p">],</span>
+    <span class="p">)</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/health"</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">health</span><span class="p">():</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">"status"</span><span class="p">:</span> <span class="s2">"ok"</span><span class="p">,</span> <span class="s2">"llm"</span><span class="p">:</span> <span class="nb">type</span><span class="p">(</span><span class="n">llm</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">}</span>
+</code></pre></div>
+
+<p><code>test_app.py</code> ✅：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">fastapi.testclient</span><span class="w"> </span><span class="kn">import</span> <span class="n">TestClient</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">app</span><span class="w"> </span><span class="kn">import</span> <span class="n">app</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">TestClient</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_ask_returns_sources</span><span class="p">():</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">"/ask"</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">"question"</span><span class="p">:</span> <span class="s2">"什么是RAG"</span><span class="p">})</span>
+    <span class="k">assert</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span>
+    <span class="n">body</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="n">body</span><span class="p">[</span><span class="s2">"answer"</span><span class="p">]</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">body</span><span class="p">[</span><span class="s2">"sources"</span><span class="p">])</span> <span class="o">==</span> <span class="mi">2</span>
+    <span class="k">assert</span> <span class="s2">"RAG"</span> <span class="ow">in</span> <span class="n">body</span><span class="p">[</span><span class="s2">"sources"</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">"text"</span><span class="p">]</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_ask_validation</span><span class="p">():</span>
+    <span class="k">assert</span> <span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">"/ask"</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">"question"</span><span class="p">:</span> <span class="s2">""</span><span class="p">})</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">422</span>
+    <span class="k">assert</span> <span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">"/ask"</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">"question"</span><span class="p">:</span> <span class="s2">"hi"</span><span class="p">,</span> <span class="s2">"top_k"</span><span class="p">:</span> <span class="mi">99</span><span class="p">})</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">422</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_health</span><span class="p">():</span>
+    <span class="k">assert</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/health"</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">"status"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"ok"</span>
+</code></pre></div>
+
+<p>运行与实测：</p>
+<div class="highlight"><pre><span></span><code>uv<span class="w"> </span>run<span class="w"> </span>uvicorn<span class="w"> </span>app:app<span class="w"> </span>--reload<span class="w"> </span>--port<span class="w"> </span><span class="m">8000</span>
+curl<span class="w"> </span>-s<span class="w"> </span>http://127.0.0.1:8000/ask<span class="w"> </span>-H<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span>-d<span class="w"> </span><span class="s1">'{"question":"什么是RAG"}'</span>
+</code></pre></div>
+
+<p>curl 实测返回（mock 模式）：</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"answer"</span><span class="p">:</span><span class="w"> </span><span class="s2">"[mock] 已收到 2 条消息，最后一条：资料：\n[1] RAG（检索增强生成）先从知识库检索相关片段，再交给大模型生成回..."</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"sources"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RAG（检索增强生成）先从知识库检索相关片段，再交给大模型生成回答，能缓解幻觉并注入私有知识。"</span><span class="p">,</span><span class="w"> </span><span class="nt">"score"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.408</span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"FastAPI 是 Python 的异步 Web 框架，配合 pydantic 做请求校验，自带 /docs 交互式文档。"</span><span class="p">,</span><span class="w"> </span><span class="nt">"score"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.235</span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><code>/health</code> → <code>{"status":"ok","llm":"FakeLLM"}</code>；<code>/docs</code> → 200；空 question → 422。<code>uv run pytest -q</code> → 9 passed。</p>
+<p>切换真实 LLM 🔑：</p>
+<div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">LLM_API_KEY</span><span class="o">=</span>你的Key
+<span class="nb">export</span><span class="w"> </span><span class="nv">LLM_BASE_URL</span><span class="o">=</span>https://dashscope.aliyuncs.com/compatible-mode/v1<span class="w">   </span><span class="c1"># 或 DeepSeek/OpenAI</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">LLM_MODEL</span><span class="o">=</span>qwen-plus
+uv<span class="w"> </span>run<span class="w"> </span>uvicorn<span class="w"> </span>app:app<span class="w"> </span>--port<span class="w"> </span><span class="m">8000</span><span class="w">    </span><span class="c1"># /health 会显示 OpenAILLM</span>
+</code></pre></div>
+
+<p>设计决策回顾（都是前面学过的规则落地）：</p>
+<ul>
+<li><code>def ask</code> 而非 <code>async def</code>：同步 OpenAI SDK 是阻塞 IO，P4 规则 → 线程池。</li>
+<li>返回 sources：可溯源是 RAG 产品的底线。</li>
+<li>索引启动时建：4 条 KB 无所谓；真实规模见 8.4。</li>
+</ul>
+<h3 id="82-全天常见坑汇总表">8.2 全天常见坑汇总表</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>阶段</th>
+<th>坑</th>
+<th>正确姿势</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>P1</td>
+<td>直接 <code>python xxx.py</code> 用到系统老解释器</td>
+<td>永远 <code>uv run</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td>P1</td>
+<td>Tab/空格混用</td>
+<td>统一 4 空格</td>
+</tr>
+<tr>
+<td>3</td>
+<td>P1</td>
+<td><code>if not x</code> 把 0/"" 当空</td>
+<td>数值判空 <code>is None</code> 显式写</td>
+</tr>
+<tr>
+<td>4</td>
+<td>P1</td>
+<td><code>is</code> 比值</td>
+<td><code>==</code> 比值，<code>is</code> 只用于 None</td>
+</tr>
+<tr>
+<td>5</td>
+<td>P1</td>
+<td>指望编译器兜底</td>
+<td>标注 + pyright + pytest</td>
+</tr>
+<tr>
+<td>6</td>
+<td>P2</td>
+<td><code>msg[缺失键]</code> 抛 KeyError</td>
+<td><code>.get()</code></td>
+</tr>
+<tr>
+<td>7</td>
+<td>P2</td>
+<td>以为标注会校验</td>
+<td>边界校验靠 pydantic</td>
+</tr>
+<tr>
+<td>8</td>
+<td>P2</td>
+<td><code>[[]] * 3</code> 共享引用</td>
+<td><code>[[] for _ in range(3)]</code></td>
+</tr>
+<tr>
+<td>9</td>
+<td>P2</td>
+<td><code>b = a</code> 当拷贝</td>
+<td><code>a[:]</code> / <code>a.copy()</code></td>
+</tr>
+<tr>
+<td>10</td>
+<td>P2</td>
+<td>set 去重丢顺序</td>
+<td><code>dict.fromkeys</code> 保序</td>
+</tr>
+<tr>
+<td>11</td>
+<td>P3</td>
+<td>可变默认参数跨调用共享</td>
+<td><code>None</code> 哨兵</td>
+</tr>
+<tr>
+<td>12</td>
+<td>P3</td>
+<td>写重载被静默覆盖</td>
+<td>默认参数</td>
+</tr>
+<tr>
+<td>13</td>
+<td>P3</td>
+<td>实例方法忘 self</td>
+<td>第一个参数永远 self</td>
+</tr>
+<tr>
+<td>14</td>
+<td>P3</td>
+<td>类属性可变共享 ≈ static</td>
+<td>实例数据放 <code>__init__</code></td>
+</tr>
+<tr>
+<td>15</td>
+<td>P3</td>
+<td>装饰器忘 <code>@wraps</code></td>
+<td>固定加</td>
+</tr>
+<tr>
+<td>16</td>
+<td>P4</td>
+<td>dumps 中文变转义</td>
+<td><code>ensure_ascii=False</code></td>
+</tr>
+<tr>
+<td>17</td>
+<td>P4</td>
+<td>不写 encoding</td>
+<td>显式 <code>utf-8</code></td>
+</tr>
+<tr>
+<td>18</td>
+<td>P4</td>
+<td>json 不认识 dataclass</td>
+<td><code>asdict()</code> / <code>**</code> 解包</td>
+</tr>
+<tr>
+<td>19</td>
+<td>P4</td>
+<td>忘 <code>raise_for_status()</code></td>
+<td>固定加</td>
+</tr>
+<tr>
+<td>20</td>
+<td>P4</td>
+<td>httpx 默认 5s 超时</td>
+<td>LLM 调用 <code>timeout=60</code></td>
+</tr>
+<tr>
+<td>21</td>
+<td>P4</td>
+<td>async 里同步阻塞</td>
+<td>await 异步库</td>
+</tr>
+<tr>
+<td>22</td>
+<td>P5</td>
+<td><code>*</code> 当点积</td>
+<td>点积用 <code>@</code></td>
+</tr>
+<tr>
+<td>23</td>
+<td>P5</td>
+<td>numpy 切片当拷贝</td>
+<td>视图！要 <code>.copy()</code></td>
+</tr>
+<tr>
+<td>24</td>
+<td>P5</td>
+<td>int 数组存小数被截断</td>
+<td>float dtype</td>
+</tr>
+<tr>
+<td>25</td>
+<td>P5</td>
+<td>广播静默扩维</td>
+<td>先 <code>print(shape)</code></td>
+</tr>
+<tr>
+<td>26</td>
+<td>P5</td>
+<td>浮点 <code>== 1.0</code></td>
+<td><code>pytest.approx</code></td>
+</tr>
+<tr>
+<td>27</td>
+<td>P6</td>
+<td>Key 硬编码</td>
+<td>只走环境变量</td>
+</tr>
+<tr>
+<td>28</td>
+<td>P6</td>
+<td>mock embedding 当语义</td>
+<td>真实模型再评估</td>
+</tr>
+<tr>
+<td>29</td>
+<td>P6</td>
+<td>零向量除零</td>
+<td>分母 <code>+1e-10</code></td>
+</tr>
+<tr>
+<td>30</td>
+<td>P6</td>
+<td>context 塞太多</td>
+<td>k=2~5，chunk 200~500 字</td>
+</tr>
+<tr>
+<td>31</td>
+<td>P6</td>
+<td>换 embedding 模型不重建索引</td>
+<td>全量重建</td>
+</tr>
+<tr>
+<td>32</td>
+<td>P7</td>
+<td>async def 调同步 SDK</td>
+<td><code>def</code> 端点 / AsyncOpenAI</td>
+</tr>
+<tr>
+<td>33</td>
+<td>P7</td>
+<td><code>--reload</code> 上生产</td>
+<td><code>--workers N</code></td>
+</tr>
+<tr>
+<td>34</td>
+<td>P8</td>
+<td>RAG 不返回 sources</td>
+<td>answer + sources 一起回</td>
+</tr>
+</tbody>
+</table>
+<h3 id="83-自测清单能全勾上-达标">8.3 自测清单（能全勾上 = 达标）</h3>
+<p>环境与语法（P1）：</p>
+<ul>
+<li class="task"><input type="checkbox" disabled> 能解释 .venv 为什么存在，<code>uv run</code> 做了哪两件事</li>
+<li class="task"><input type="checkbox" disabled> 能说清 <code>==</code>/<code>is</code> 与 Java 的对应关系</li>
+<li class="task"><input type="checkbox" disabled> 能解释真值判断为什么会误伤 0</li>
+<li class="task"><input type="checkbox" disabled> 项目里所有运行都走 <code>uv run</code></li>
+</ul>
+<p>类型与容器（P2）：</p>
+<ul>
+<li class="task"><input type="checkbox" disabled> 能写 <code>list[dict[str, str]]</code>、<code>str | None</code> 标注并解释运行时不强制</li>
+<li class="task"><input type="checkbox" disabled> 能默写 filter+map 推导式并翻译成 Stream</li>
+<li class="task"><input type="checkbox" disabled> 能解释 <code>[[]] * 3</code> 为什么错</li>
+<li class="task"><input type="checkbox" disabled> <code>token_stats</code> 练习输出 (15, 3.75)</li>
+</ul>
+<p>函数与类（P3）：</p>
+<ul>
+<li class="task"><input type="checkbox" disabled> 能默写 <code>@retry</code>（含 @wraps）</li>
+<li class="task"><input type="checkbox" disabled> 能解释装饰器与 Java 注解的本质区别</li>
+<li class="task"><input type="checkbox" disabled> 能写 dataclass + <code>field(default_factory=list)</code> + <code>asdict</code></li>
+<li class="task"><input type="checkbox" disabled> 能解释可变默认参数坑的修法</li>
+</ul>
+<p>IO 与并发（P4）：</p>
+<ul>
+<li class="task"><input type="checkbox" disabled> 对话落盘/读回往返相等</li>
+<li class="task"><input type="checkbox" disabled> httpx 取到 wttr.in 温度并打印</li>
+<li class="task"><input type="checkbox" disabled> 能解释 await vs Thread.sleep，gather 实测快于串行</li>
+<li class="task"><input type="checkbox" disabled> 记得 <code>ensure_ascii=False</code> 和 <code>raise_for_status()</code></li>
+</ul>
+<p>向量（P5）：</p>
+<ul>
+<li class="task"><input type="checkbox" disabled> 手写 cosine 批量版 top-2 = [0 2]</li>
+<li class="task"><input type="checkbox" disabled> 能解释 <code>*</code> vs <code>@</code>、视图 vs 拷贝</li>
+<li class="task"><input type="checkbox" disabled> 能解释自相似为什么不精确等于 1</li>
+</ul>
+<p>LLM 与 RAG（P6）：</p>
+<ul>
+<li class="task"><input type="checkbox" disabled> 能解释 OpenAI 兼容协议 ≈ JDBC，换厂商改哪三样</li>
+<li class="task"><input type="checkbox" disabled> rag.py 两个 query top-1 命中正确</li>
+<li class="task"><input type="checkbox" disabled> 能背出 RAG 五步管道</li>
+<li class="task"><input type="checkbox" disabled> 能解释 mock embedding 的边界</li>
+</ul>
+<p>服务与测试（P7）：</p>
+<ul>
+<li class="task"><input type="checkbox" disabled> /docs 里手动调通 /chat，空 question 得 422</li>
+<li class="task"><input type="checkbox" disabled> 默写 3 个 pytest 用例全过</li>
+<li class="task"><input type="checkbox" disabled> 能解释 pydantic 三合一、TestClient ≈ MockMvc</li>
+</ul>
+<p>综合（P8）：</p>
+<ul>
+<li class="task"><input type="checkbox" disabled> uvicorn 起服务，curl /ask 拿到 answer + sources</li>
+<li class="task"><input type="checkbox" disabled> <code>uv run pytest -q</code> 全绿</li>
+<li class="task"><input type="checkbox" disabled> （有 Key）切真实 LLM 后 /health 显示 OpenAILLM 且回答真实</li>
+</ul>
+<h3 id="84-下一步选型地图1-天之后往哪走">8.4 下一步选型地图（1 天之后往哪走）</h3>
+<table>
+<thead>
+<tr>
+<th>方向</th>
+<th>最小选择</th>
+<th>何时升级</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>流式输出</td>
+<td>SSE + <code>AsyncOpenAI</code> stream</td>
+<td>前端要打字机效果时</td>
+</tr>
+<tr>
+<td>向量存储</td>
+<td>numpy 手写（本课）</td>
+<td>万级 chunk 以上 → Chroma（嵌入式）/ pgvector（复用 PG）</td>
+</tr>
+<tr>
+<td>编排框架</td>
+<td>手写（本课，最透明）</td>
+<td>多步复杂编排再上 LangChain / LlamaIndex</td>
+</tr>
+<tr>
+<td>评估</td>
+<td>pytest + 自制评测集</td>
+<td>系统化评估 → ragas</td>
+</tr>
+<tr>
+<td>部署</td>
+<td>uvicorn --workers + Docker</td>
+<td>异步深水区：TaskGroup / 限流信号量</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="附录验证环境与方法">附录：验证环境与方法</h2>
+<ul>
+<li>验证环境：macOS（arm64）/ Python 3.12（uv 管理）/ uv 0.7.19。</li>
+<li>标注 ✅ 的代码均在上述环境实际运行，文中输出为真实运行结果。</li>
+<li>标注 🔑 的代码（真实 LLM/embedding 网络调用）验证了客户端构造与接线，未消耗真实 Key 发起调用。</li>
+<li>沙箱/CI 若注入畸形 <code>NO_PROXY</code>（如含 <code>[::1]</code>）会导致 httpx 解析崩溃：<code>trust_env=False</code> 或清理环境变量。</li>
+<li>依赖清单：<code>uv add httpx openai fastapi "uvicorn[standard]" numpy pandas pytest</code>。</li>
+</ul>
+</div>
+</body>
+</html>
